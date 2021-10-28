@@ -1,4 +1,10 @@
-<?php require './config/db.php'; ?>
+<?php
+require './config/db.php';
+$query = $conn->query("SELECT articles.id, title, thumbnail_id, articles.created_at, src, authors.fullname FROM articles 
+                       INNER JOIN images ON articles.thumbnail_id = images.id 
+                       INNER JOIN authors ON articles.author_id = authors.id");
+$articles = $query->fetchAll();
+?>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -190,90 +196,25 @@
                 </div>
                 <div class="wrap">
                     <ul class="articles">
-                        <li class="articles__item">
-                            <a href="#" class="articles__link">
-                                <div class="articles__cover">
-                                    <img src="./public/assets/image/a1.png" alt="article-image" />
+                        <?php foreach ($articles as $article) : ?>
+                            <li class="articles__item">
+                                <a href="./views/article.show.php?id=<?php echo $article['id']?>" class="articles__link">
+                                    <div class="articles__cover">
+                                        <img src="./public/assets/image/articles/<?php echo $article['src']?>" alt="article-image" />
+                                    </div>
+                                    <p class="articles__content">
+                                        <?php echo $article['title']?>
+                                    </p>
+                                </a>
+                                <div class="articles__stamp">
+                                    <p class="articles__time">
+                                        <img src="./public/assets/image/icon.png" class="clock-icon clock-icon--size" alt="time-stamp" />
+                                        <?php echo $article['created_at']?>
+                                    </p>
+                                    <a href="#" class="articles__company-release"><?php echo $article['fullname'] ?></a>
                                 </div>
-                                <p class="articles__content">
-                                    BRITA JapanがG20のユース向け公式付属会議「Y20 SUMMIT 2019
-                                    JAPAN」に登壇！マイボトル化推進...
-                                </p>
-                            </a>
-                            <div class="articles__stamp">
-                                <p class="articles__time">
-                                    <img src="./public/assets/image/icon.png" class="clock-icon clock-icon--size" alt="time-stamp" />
-                                    5分前
-                                </p>
-                                <a href="#" class="articles__company-release">BRITA Japan株式会社</a>
-                            </div>
-                        </li>
-                        <li class="articles__item">
-                            <a href="#" class="articles__link">
-                                <div class="articles__cover">
-                                    <img src="./public/assets/image/a1.png" alt="article-image" />
-                                </div>
-                                <p class="articles__content">
-                                    近くの飲食店を社食として利用できる【どこでも社食】が「東京純豆腐」と提携近くの飲食店を社食として利用できる【どこでも社食】が「東京純豆腐」と提携
-                                </p>
-                            </a>
-                            <div class="articles__stamp">
-                                <p class="articles__time">
-                                    <img src="./public/assets/image/icon.png" class="clock-icon clock-icon--size" alt="time-stamp" />
-                                    5分前
-                                </p>
-                                <a class="articles__company-release" href="#">BRITA Japan株式会社</a>
-                            </div>
-                        </li>
-                        <li class="articles__item">
-                            <a href="#" class="articles__link">
-                                <div class="articles__cover">
-                                    <img src="./public/assets/image/a1.png" alt="article-image" />
-                                </div>
-                                <p class="articles__content">創業10年で10件の特許を取得！</p>
-                            </a>
-                            <div class="articles__stamp">
-                                <p class="articles__time">
-                                    <img src="./public/assets/image/icon.png" class="clock-icon clock-icon--size" alt="time-stamp" />
-                                    5分前
-                                </p>
-                                <a href="#" class="articles__company-release">BRITA Japan株式会社</a>
-                            </div>
-                        </li>
-                        <li class="articles__item">
-                            <a href="#" class="articles__link">
-                                <div class="articles__cover">
-                                    <img src="./public/assets/image/a1.png" alt="article-image" />
-                                </div>
-                                <p class="articles__content">
-                                    チャット型検索エンジン『CHAT EXTENSION』を提供開始
-                                </p>
-                            </a>
-                            <div class="articles__stamp">
-                                <p class="articles__time">
-                                    <img src="./public/assets/image/icon.png" class="clock-icon clock-icon--size" alt="time-stamp" />
-                                    5分前
-                                </p>
-                                <a href="#" class="articles__company-release">BRITA Japan株式会社</a>
-                            </div>
-                        </li>
-                        <li class="articles__item">
-                            <a href="#" class="articles__link">
-                                <div class="articles__cover">
-                                    <img src="./public/assets/image/a1.png" alt="article-image" />
-                                </div>
-                                <p class="articles__content">
-                                    AWAが月額480円の新プラン「学生プラン」をスタート
-                                </p>
-                            </a>
-                            <div class="articles__stamp">
-                                <p class="articles__time">
-                                    <img src="./public/assets/image/icon.png" class="clock-icon clock-icon--size" alt="time-stamp" />
-                                    5分前
-                                </p>
-                                <a href="#" class="articles__company-release">BRITA Japan株式会社</a>
-                            </div>
-                        </li>
+                            </li>
+                        <?php endforeach ?>
                     </ul>
                     <div class="control">
                         <a class="btn btn--primary input--radius" href="./views/check.php">もっと見る</a>
