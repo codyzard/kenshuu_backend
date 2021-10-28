@@ -1,0 +1,69 @@
+input, textarea, label, button, select, option {
+  font-size: 1.4rem;
+}
+
+.post-article {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: 10px 0;
+}
+
+.post-article__heading {
+  font-size: 2.4rem;
+}
+
+.form {
+  margin: 25px 0;
+  padding: 25px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: beige;
+  gap: 20px;
+}
+
+.form button {
+  width: 30%;
+  margin: 0 auto;
+  background-color: #24436f;
+  color: white;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.form button:hover {
+  cursor: pointer;
+  -webkit-transform: scaleX(1.1);
+          transform: scaleX(1.1);
+}
+
+.form-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 10px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.form-group label {
+  width: 20%;
+}
+
+.form-group select {
+  width: 100%;
+}
+/*# sourceMappingURL=article_new.css.map */

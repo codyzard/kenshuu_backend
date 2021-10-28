@@ -17,8 +17,8 @@ CREATE TABLE authors (
 
 CREATE TABLE articles (
 	id BIGINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    thumbnail_id INTEGER, #ref to image_id
     title TEXT NOT NULL,
+    thumbnail_id INTEGER, #ref to image_id
     content MEDIUMTEXT ,
 	page_view INTEGER UNSIGNED DEFAULT 0, #number of view
     created_at DATETIME,
@@ -86,32 +86,32 @@ VALUES ('グルメ');
 INSERT INTO categories(category_name)
 VALUES ('スポーツ');
 
-INSERT INTO articles(thumbnail_id, title, content, author_id)
-VALUES (1, 'first article', 'hello everyone', 1);
-INSERT INTO articles(thumbnail_id, title, content, author_id)
-VALUES (3, 'second article', 'minna-san konnichiwa', 2);
-INSERT INTO articles(thumbnail_id, title, content, author_id)
-VALUES (5, 'fifa vs pes', 'both of them are great', 1);
+-- INSERT INTO articles(thumbnail_id, title, content, author_id)
+-- VALUES (1, 'first article', 'hello everyone', 1);
+-- INSERT INTO articles(thumbnail_id, title, content, author_id)
+-- VALUES (3, 'second article', 'minna-san konnichiwa', 2);
+-- INSERT INTO articles(thumbnail_id, title, content, author_id)
+-- VALUES (5, 'fifa vs pes', 'both of them are great', 1);
 
-INSERT INTO images(src, article_id)
-VALUES ('https://bom.to/9ikfNp', 1);
-INSERT INTO images(src, article_id)
-VALUES ('https://bom.to/s9ikfNap', 1);
-INSERT INTO images(src, article_id)
-VALUES ('https://bom.to/s9ikfNaap', 2);
-INSERT INTO images(src, article_id)
-VALUES ('https://bom.to/s9ikfNasdap', 2);
-INSERT INTO images(src, article_id)
-VALUES ('https://bom.to/sfNasdap', 3);
+-- INSERT INTO images(src, article_id)
+-- VALUES ('https://bom.to/9ikfNp', 1);
+-- INSERT INTO images(src, article_id)
+-- VALUES ('https://bom.to/s9ikfNap', 1);
+-- INSERT INTO images(src, article_id)
+-- VALUES ('https://bom.to/s9ikfNaap', 2);
+-- INSERT INTO images(src, article_id)
+-- VALUES ('https://bom.to/s9ikfNasdap', 2);
+-- INSERT INTO images(src, article_id)
+-- VALUES ('https://bom.to/sfNasdap', 3);
 
-INSERT INTO articles_categories(article_id, category_id)
-VALUES (1,2);
-INSERT INTO articles_categories(article_id, category_id)
-VALUES (2,2);
-INSERT INTO articles_categories(article_id, category_id)
-VALUES (3,3);
-INSERT INTO articles_categories(article_id, category_id)
-VALUES (3,4);
+-- INSERT INTO articles_categories(article_id, category_id)
+-- VALUES (1,2);
+-- INSERT INTO articles_categories(article_id, category_id)
+-- VALUES (2,2);
+-- INSERT INTO articles_categories(article_id, category_id)
+-- VALUES (3,3);
+-- INSERT INTO articles_categories(article_id, category_id)
+-- VALUES (3,4);
 
 #delete from articles where id = 2;
 #delete from authors where id = 2;
