@@ -1,0 +1,21 @@
+/* Init */
+
+@import "common/reset";
+@import "common/variable";
+@import "common/global-modify";
+@import "common/mixin";
+
+/* end Init */
+
+/* Layout */
+
+@import "layout/header";
+@import "layout/navigation";
+@import "layout/ranking";
+@import "layout/main";
+@import "layout/footer";
+
+/* end Layout */
+
+
+

@@ -1,0 +1,32 @@
+/* Common */
+
+.clock-icon--size {
+  width: 10px;
+  height: 10px;
+}
+
+.input--radius {
+  border-radius: 5px;
+}
+
+.btn--primary {
+  background-color: $btn_color;
+}
+
+.btn{
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.btn--info{
+  background-color: #31b0d5;
+  border: 1px solid #31b0d5;
+  color: white;
+  &:hover{
+    background-color: white;
+    color: #31b0d5;
+  }
+}
+
+/* end Common */
