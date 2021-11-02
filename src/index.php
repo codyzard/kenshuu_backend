@@ -1,9 +1,14 @@
 <?php
 require './config/db.php';
-$query = $conn->query("SELECT articles.id, title, thumbnail_id, articles.created_at, src, authors.fullname FROM articles
+session_start();
+try {
+    $query = $conn->query("SELECT articles.id, title, thumbnail_id, articles.created_at, src, authors.fullname FROM articles
                        LEFT JOIN images ON articles.thumbnail_id = images.id 
                        INNER JOIN authors ON articles.author_id = authors.id  ORDER BY created_at DESC ");
-$articles = $query->fetchAll();
+    $articles = $query->fetchAll();
+} catch (PDOException $e) {
+    echo 'Error: ' . $e->getCode();
+}
 ?>
 
 <!DOCTYPE html>
@@ -15,7 +20,7 @@ $articles = $query->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="プレスリリースサイト" />
     <link rel="shortcut icon" type="image/png" href="./public/assets/image/favicon.ico" />
-    <link rel="stylesheet" href="./public/assets/sass/main.css?<?php echo time();?>" />
+    <link rel="stylesheet" href="./public/assets/sass/main.css?<?php echo time(); ?>" />
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <title>PR TIMES｜プレスリリース・ニュースリリースNo.1配信サービス</title>
 </head>
@@ -195,21 +200,29 @@ $articles = $query->fetchAll();
                     <a class="btn btn--info btn--radius" href="./views/article_new.php">投稿</a>
                 </div>
                 <div class="wrap">
+                    <?php if (!empty($_SESSION['messages'])) : ?>
+                        <div class="flash flash--success">
+                            <?php foreach ($_SESSION['messages'] as $mess) : ?>
+                                <p class="message"><?php echo $mess ?></p>
+                            <?php endforeach ?>
+                            <?php $_SESSION['messages'] = [] ?>
+                        </div>
+                    <?php endif ?>
                     <ul class="articles">
                         <?php foreach ($articles as $article) : ?>
                             <li class="articles__item">
-                                <a href="./views/article_show.php?id=<?php echo $article['id']?>" class="articles__link">
+                                <a href="./views/article_show.php?id=<?php echo $article['id'] ?>" class="articles__link">
                                     <div class="articles__cover">
-                                        <img src="./public/assets/image/articles/<?php echo $article['thumbnail_id'] ? $article['src'] :  '223x148.png'?>" alt="article-image" />
+                                        <img src="./public/assets/image/articles/<?php echo $article['thumbnail_id'] ? $article['src'] :  '223x148.png' ?>" alt="article-image" />
                                     </div>
                                     <p class="articles__content">
-                                        <?php echo $article['title']?>
+                                        <?php echo $article['title'] ?>
                                     </p>
                                 </a>
                                 <div class="articles__stamp">
                                     <p class="articles__time">
                                         <img src="./public/assets/image/icon.png" class="clock-icon clock-icon--size" alt="time-stamp" />
-                                        <?php echo $article['created_at']?>
+                                        <?php echo $article['created_at'] ?>
                                     </p>
                                     <a href="#" class="articles__company-release"><?php echo $article['fullname'] ?></a>
                                 </div>

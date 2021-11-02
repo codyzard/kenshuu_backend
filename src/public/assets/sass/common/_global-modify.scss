@@ -66,6 +66,17 @@ button{
     }
   }
 
+  &--danger{
+    background-color: $danger2_color;
+    border-color: $danger2_color;
+    font-size: 1.4rem;
+    width: 70px;
+    text-align: center;
+    &:hover {
+      color: $danger2_color;
+    }
+  }
+
   &--large {
     width: 30%;
   }

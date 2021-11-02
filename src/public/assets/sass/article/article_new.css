@@ -71,6 +71,18 @@ button {
   color: #24436f;
 }
 
+.btn--danger {
+  background-color: #bd2130;
+  border-color: #bd2130;
+  font-size: 1.4rem;
+  width: 70px;
+  text-align: center;
+}
+
+.btn--danger:hover {
+  color: #bd2130;
+}
+
 .btn--large {
   width: 30%;
 }

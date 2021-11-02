@@ -70,6 +70,7 @@ if (isset($_REQUEST['id'])) {
             </div>
             <div class="control">
                 <a class="btn btn--warning btn--radius" href="./article_edit.php?id=<?php echo $id ?>">変更</a>
+                <a class="btn btn--danger btn--radius" onclick="return confirm('Are you sure?')" href="./../controllers/articles/delete.php?id=<?php echo $id ?>">削除</a>
             </div>
         </div>
         <?php include '../views/common/_footer.php' ?>
