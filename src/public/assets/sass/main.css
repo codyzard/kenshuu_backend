@@ -28,7 +28,15 @@ input {
   border: none;
 }
 
+i {
+  color: inherit;
+}
+
 /* Common */
+button {
+  cursor: pointer;
+}
+
 .clock-icon--size {
   width: 10px;
   height: 10px;
@@ -38,25 +46,87 @@ input {
   border-radius: 5px;
 }
 
-.btn--primary {
-  background-color: #3081c9;
-}
-
 .btn {
   display: inline-block;
   padding: 5px 10px;
   border-radius: 5px;
+  border: 1px solid;
+  color: white;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.btn:hover {
+  background-color: white;
+  -webkit-transform: scaleX(1.1);
+          transform: scaleX(1.1);
+}
+
+.btn--light-blue {
+  background-color: #3081c9;
+  border-color: #3081c9;
+}
+
+.btn--light-blue:hover {
+  background-color: white;
+  color: #3081c9;
 }
 
 .btn--info {
   background-color: #31b0d5;
-  border: 1px solid #31b0d5;
-  color: white;
+  border-color: #31b0d5;
+  font-size: 1.4rem;
+  width: 70px;
+  text-align: center;
 }
 
 .btn--info:hover {
-  background-color: white;
   color: #31b0d5;
+}
+
+.btn--warning {
+  background-color: #ec971f;
+  border-color: #ec971f;
+  font-size: 1.4rem;
+  width: 70px;
+  text-align: center;
+}
+
+.btn--warning:hover {
+  color: #ec971f;
+}
+
+.btn--primary {
+  margin: 0 auto;
+  background-color: #24436f;
+}
+
+.btn--primary:hover {
+  color: #24436f;
+}
+
+.btn--large {
+  width: 30%;
+}
+
+.flash {
+  width: 29%;
+  padding: 15px 20px;
+  border-radius: 5px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.flash .message {
+  font-size: 1.2rem;
+}
+
+.flash--success {
+  background-color: #dafbe1;
+}
+
+.flash--danger {
+  background-color: #ffebe9;
 }
 
 /* end Common */

@@ -1,0 +1,35 @@
+@import "./../common/global-modify";
+.main {
+  width: 1126px;
+  display: flex;
+  flex-direction: column;
+}
+
+.article {
+  margin: 0 auto;
+  &__title {
+    font-size: 2rem;
+  }
+  &__time,
+  &__author,
+  &__view,
+  &__content {
+    font-size: inherit;
+  }
+  .sub-info {
+    font-size: 1.3rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  &-main {
+    margin: 40px 0;
+    font-size: 1.8rem;
+    letter-spacing: 1.1px;
+    line-height: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  
+}

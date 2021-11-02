@@ -1,8 +1,8 @@
 <?php
 require './config/db.php';
-$query = $conn->query("SELECT articles.id, title, thumbnail_id, articles.created_at, src, authors.fullname FROM articles 
-                       INNER JOIN images ON articles.thumbnail_id = images.id 
-                       INNER JOIN authors ON articles.author_id = authors.id");
+$query = $conn->query("SELECT articles.id, title, thumbnail_id, articles.created_at, src, authors.fullname FROM articles
+                       LEFT JOIN images ON articles.thumbnail_id = images.id 
+                       INNER JOIN authors ON articles.author_id = authors.id  ORDER BY created_at DESC ");
 $articles = $query->fetchAll();
 ?>
 
@@ -15,7 +15,7 @@ $articles = $query->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="プレスリリースサイト" />
     <link rel="shortcut icon" type="image/png" href="./public/assets/image/favicon.ico" />
-    <link rel="stylesheet" href="./public/assets/sass/main.css" />
+    <link rel="stylesheet" href="./public/assets/sass/main.css?<?php echo time();?>" />
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
     <title>PR TIMES｜プレスリリース・ニュースリリースNo.1配信サービス</title>
 </head>
@@ -192,15 +192,15 @@ $articles = $query->fetchAll();
             <div class="contents">
                 <div class="top-heading">
                     <h3 class="contents__title">新着プレスリリース</h3>
-                    <a class="btn btn--info btn--radius" href="./views/article_new.php">Submit</a>
+                    <a class="btn btn--info btn--radius" href="./views/article_new.php">投稿</a>
                 </div>
                 <div class="wrap">
                     <ul class="articles">
                         <?php foreach ($articles as $article) : ?>
                             <li class="articles__item">
-                                <a href="./views/article.show.php?id=<?php echo $article['id']?>" class="articles__link">
+                                <a href="./views/article_show.php?id=<?php echo $article['id']?>" class="articles__link">
                                     <div class="articles__cover">
-                                        <img src="./public/assets/image/articles/<?php echo $article['src']?>" alt="article-image" />
+                                        <img src="./public/assets/image/articles/<?php echo $article['thumbnail_id'] ? $article['src'] :  '223x148.png'?>" alt="article-image" />
                                     </div>
                                     <p class="articles__content">
                                         <?php echo $article['title']?>
@@ -217,7 +217,7 @@ $articles = $query->fetchAll();
                         <?php endforeach ?>
                     </ul>
                     <div class="control">
-                        <a class="btn btn--primary input--radius" href="./views/check.php">もっと見る</a>
+                        <a class="btn btn--light-blue input--radius" href="./views/check.php">もっと見る</a>
                     </div>
                 </div>
             </div>
