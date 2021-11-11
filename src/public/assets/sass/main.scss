@@ -7,6 +7,7 @@
 
 /* end Init */
 
+
 /* Layout */
 
 @import "layout/header";
@@ -16,6 +17,14 @@
 @import "layout/footer";
 
 /* end Layout */
+
+
+/* Articles */
+
+@import "article/article_new";
+@import "article/article_show";
+
+/* end Articles */
 
 
 

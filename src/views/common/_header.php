@@ -20,7 +20,7 @@
             </ul>
             <div class="search-box">
                 <input type="text" placeholder="キーワードで検索" class="input--radius" />
-                <button class="btn btn--primary input--radius">
+                <button class="btn btn--light-blue input--radius">
                     <img src="../public/assets/image/search.png" alt="search-button" />
                 </button>
             </div>
