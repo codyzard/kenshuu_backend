@@ -1,17 +1,10 @@
 <?php
 session_start();
 
-require 'vendor/autoload.php';
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
-require './core/Database.php';
 require './core/Helper.php';
+require './core/Database.php';
 require './models/BaseModel.php';
 require './controllers/BaseController.php';
-
-
-
 
 
 $controllerName = ucfirst(strtolower($_REQUEST['controller']) ?: 'Home') . 'Controller';

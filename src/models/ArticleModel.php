@@ -69,21 +69,17 @@ class ArticleModel extends BaseModel
             $created_article_id = $this->connect->lastInsertId();
 
             //Create thumbnail if param exists and save thumbnail id into article
-            if (!empty($thumbnail["name"])) {
+            if (file_exists($thumbnail['tmp_name'])) {
                 //save file in public
-                $info = pathinfo($_FILES['thumbnail']['name']);
-                $ext = $info['extension']; // get the extension of the file
-                $newname = uniqid() . '.' . $ext;
-                $target = __DIR__ . '/../public/assets/image/articles/' . $newname;
-                if (!is_dir(__DIR__ . '/../public/assets/image/articles')) {
-                    mkdir(__DIR__ . '/../public/assets/image/articles');
-                }
-                move_uploaded_file($_FILES['thumbnail']['tmp_name'], $target);
+                $location  = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/image/articles/'; // 'set location save image'
+                $image_name = Helper::store_image($thumbnail, $location); //get name file;
+                $path  = $location . $image_name;
+
                 //save thumbnail src in database;
                 $sql_image = "INSERT INTO images (src, article_id, created_at, updated_at)
                         VALUES (:src, :article_id, now(), now())";
                 $query_image = $this->prepare_query($sql_image);
-                $query_image->bindValue(":src", $newname);
+                $query_image->bindValue(":src", $image_name);
                 $query_image->bindValue(":article_id", $created_article_id);
                 $result_image = $query_image->execute();
                 $created_thumbnail_id = $this->connect->lastInsertId();
@@ -105,27 +101,45 @@ class ArticleModel extends BaseModel
                 $query->bindValue(':category_id', $c_id);
                 $flag[] = $query->execute();
             }
-            $result_article_category = count(array_unique($flag)) === 1 && end($flag) ? true : false;
+            $result_article_category = (count(array_unique($flag)) === 1 && end(array_unique($flag)) == 1) ? true : false; // check all table articles_categories all value insert success;
 
             // check query executed successfully?
             if (!$result_article || (isset($result_image) && !$result_image) || (isset($result_article_image) && !$result_article_image) || !$result_article_category) {
                 $this->connect->rollBack();
-                unlink($target); // delete stored image when failed
+                unlink($path); // delete stored image when failed
                 return false;
             } else {
                 $this->connect->commit();
                 return true;
             }
         } catch (PDOException $e) {
-            unlink($target); // delete stored image when failed
+            $this->connect->rollBack();
+            unlink($path); // delete stored image when failed
             echo 'Error: ' . $e->getMessage();
         }
     }
 
     public function delete_article($id)
     {
-        $query = $this->prepare_query('DELETE FROM articles WHERE id = :id');
-        $query->bindValue(':id', $id, PDO::PARAM_INT);
-        return $query->execute();
+        //get image src
+        $query_get = $this->prepare_query('SELECT src FROM articles INNER JOIN images ON articles.thumbnail_id = images.id WHERE articles.id = :id');
+        $query_get->bindValue(':id', $id);
+        $query_get->execute();
+        $src = $query_get->fetch()[0]; // get src image for delete image from storage
+
+        //delete article
+        $query_delete = $this->prepare_query('DELETE FROM articles WHERE id = :id');
+        $query_delete->bindValue(':id', $id, PDO::PARAM_INT);
+        if ($query_delete->execute()) {
+            if (!empty($src)) {
+                try {
+                    unlink(__DIR__ . '/../public/assets/image/articles/' . $src); //  delete image from storage
+                    return true;
+                } catch (Exception $e) {
+                    echo 'Error: ' . $e->getMessage();
+                    return false;
+                }
+            } else return true;
+        } else return false;
     }
 }
