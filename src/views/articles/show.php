@@ -18,13 +18,13 @@
         </div>
         <div class="article-main">
             <?php if ($article['thumbnail_id'] !== NULL) : ?>
-                <div class="article__image"><img src="../public/assets/image/articles/<?php Helper::print_filtered($article['src']) ?>" alt="article-image"></div>
+                <div class="article__image"><img src="/public/assets/image/articles/<?php Helper::print_filtered($article['src']) ?>" alt="article-image"></div>
             <?php endif ?>
             <p class="article__content"><?php Helper::print_filtered($article['content']) ?></p>
         </div>
     </div>
     <div class="control">
-        <a class="btn btn--warning btn--radius" href="/?controller=article&action=edit&id=<?php Helper::print_filtered($id) ?>">変更</a>
-        <a class="btn btn--danger btn--radius" onclick="return confirm('Are you sure?')" href="/?controller=article&action=delete&id=<?php Helper::print_filtered($id) ?>">削除</a>
+        <a class="btn btn--warning btn--radius" href="/article/edit/<?php Helper::print_filtered($id) ?>">変更</a>
+        <a class="btn btn--danger btn--radius" onclick="return confirm('Are you sure?')" href="/article/delete/<?php Helper::print_filtered($id) ?>">削除</a>
     </div>
 </div>

@@ -13,10 +13,9 @@ class ArticleController extends BaseController
         $this->categoryModel = new CategoryModel;
     }
 
-    public function show()
+    public function show($id)
     {
-        if (isset($_REQUEST['id'])) {
-            $id = $_REQUEST['id'];
+        if (isset($id)) {
             $article = $this->articleModel->find_by_id_join_table($id);
             return $this->view("articles.show", [
                 'article' => $article,
@@ -34,7 +33,7 @@ class ArticleController extends BaseController
         ]);
     }
 
-    public function create()
+    public function create($article)
     {
         if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['categories'])) {
             if (Helper::csrf_token_validate()) {
@@ -63,11 +62,10 @@ class ArticleController extends BaseController
         }
     }
 
-    public function edit()
+    public function edit($id)
     {
         Helper::create_csrf_token();
-        if (isset($_REQUEST['id'])) {
-            $id = $_REQUEST['id'];
+        if ($id) {
             $article = $this->articleModel->show_edit($id);
             return $this->view("articles.edit", [
                 'article' => $article,
@@ -76,11 +74,10 @@ class ArticleController extends BaseController
         }
     }
 
-    public function update()
+    public function update($id)
     {
-        if (isset($_REQUEST['id']) && isset($_POST['title']) && isset($_POST['content'])) {
+        if (isset($id) && isset($_POST['title']) && isset($_POST['content'])) {
             if (Helper::csrf_token_validate()) {
-                $id = $_REQUEST['id'];
                 $title = trim($_POST['title']);
                 $content = trim($_POST['content']);
                 if (empty($title) || empty($content)) {
@@ -89,17 +86,16 @@ class ArticleController extends BaseController
                 } else {
                     if ($this->articleModel->udpate_article($id, $title, $content)) {
                         $_SESSION['messages']['update_success'] = '変更が成功でした！';
-                        header('Location: /?controller=article&action=show&id=' . $id);
+                        header('Location: /article/show/' . $id);
                     };
                 }
             }
         }
     }
 
-    public function delete()
+    public function delete($id)
     {
-        if (isset($_REQUEST['id'])) {
-            $id = $_REQUEST['id'];
+        if (isset($id)) {
             if ($this->articleModel->delete_article($id)) {
                 $_SESSION['messages']['delete_success'] = '削除が成功しました！';
                 header('Location: /index.php');

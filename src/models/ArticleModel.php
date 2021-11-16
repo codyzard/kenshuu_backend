@@ -25,11 +25,11 @@ class ArticleModel extends BaseModel
         $query->execute();
         $article = $query->fetch();
 
-        $pv = intval($article['page_view']) + 1;
-        $query_update = $this->prepare_query("UPDATE articles SET page_view = :pv WHERE id = :id");
-        $query_update->bindValue(':pv', $pv);
-        $query_update->bindValue(':id', $id);
-        $query_update->execute();
+        // $pv = intval($article['page_view']) + 1;
+        // $query_update = $this->prepare_query("UPDATE articles SET page_view = :pv WHERE id = :id");
+        // $query_update->bindValue(':pv', $pv);
+        // $query_update->bindValue(':id', $id);
+        // $query_update->execute();
 
         return $article;
     }

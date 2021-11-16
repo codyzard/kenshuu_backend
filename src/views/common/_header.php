@@ -2,7 +2,7 @@
     <div class="header-container">
         <div class="header-small-container">
             <a class="logo" href="/">
-                <img class="logo__frame" src="../public/assets/image/Frame.png" alt="logo" />
+                <img class="logo__frame" src="/public/assets/image/Frame.png" alt="logo" />
                 <h1 class="logo__text">
                     プレスリリース・ニュースリリース配信サービスのPR TIMES
                 </h1>
@@ -21,7 +21,7 @@
             <div class="search-box">
                 <input type="text" placeholder="キーワードで検索" class="input--radius" />
                 <button class="btn btn--light-blue input--radius">
-                    <img src="../public/assets/image/search.png" alt="search-button" />
+                    <img src="/public/assets/image/search.png" alt="search-button" />
                 </button>
             </div>
         </div>

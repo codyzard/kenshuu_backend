@@ -167,7 +167,7 @@
     <div class="contents">
         <div class="top-heading">
             <h3 class="contents__title">新着プレスリリース</h3>
-            <a class="btn btn--info btn--radius" href="/?controller=article&action=new">投稿</a>
+            <a class="btn btn--info btn--radius" href="article/new">投稿</a>
         </div>
         <div class="wrap">
             <?php if (!empty($_SESSION['messages'])) : ?>
@@ -178,7 +178,7 @@
             <ul class="articles">
                 <?php foreach ($articles as $article) : ?>
                     <li class="articles__item">
-                        <a href="/?controller=article&action=show&id=<?php Helper::print_filtered($article['id']) ?>" class="articles__link">
+                        <a href="/article/show/<?php Helper::print_filtered($article['id']) ?>" class="articles__link">
                             <div class="articles__cover">
                                 <img src="./public/assets/image/articles/<?php Helper::print_filtered($article['thumbnail_id'] ? $article['src'] :  'text-only.png') ?>" alt="article-image" />
                             </div>
