@@ -26,7 +26,7 @@ class ArticleController extends BaseController
 
     public function new()
     {
-        $categories = $this->categoryModel->getAll();
+        $categories = $this->categoryModel->get_all();
         Helper::create_csrf_token();
         return $this->view('articles.new', [
             'categories' => $categories,

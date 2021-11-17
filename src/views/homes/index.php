@@ -3,16 +3,9 @@
         <li class="categories__item categories__item--active-item">
             <a href="#">総合</a>
         </li>
-        <li class="categories__item"><a href="#">テクノロジー</a></li>
-        <li class="categories__item"><a href="#">モバイル</a></li>
-        <li class="categories__item"><a href="#">アプリ</a></li>
-        <li class="categories__item"><a href="#">エンタメ</a></li>
-        <li class="categories__item"><a href="#">ビューティー</a></li>
-        <li class="categories__item"><a href="#">ファッション</a></li>
-        <li class="categories__item"><a href="#">ライフスタイル</a></li>
-        <li class="categories__item"><a href="#">ビジネス</a></li>
-        <li class="categories__item"><a href="#">グルメ</a></li>
-        <li class="categories__item"><a href="#">スポーツ</a></li>
+        <?php foreach ($categories as $category) : ?>
+            <li class="categories__item"><a href="#"><?php echo $category['category_name'] ?></a></li>
+        <?php endforeach ?>
     </ul>
 </nav>
 <section class="ranking">
