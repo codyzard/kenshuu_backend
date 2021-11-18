@@ -17,8 +17,13 @@
             <textarea name="title" id="title" cols="50" rows="3" placeholder="タイトルをつけて。。。" required></textarea>
         </div>
         <div class="form-group">
+            <label for="">イメージ</label>
+            <input type="file" accept="image/png, image/jpeg" name="images[]" id="images" multiple>
+        </div>
+        <div class="form-group">
             <label for="">サムネイル</label>
-            <input type="file" accept="image/png, image/jpeg" name="thumbnail" id="thumbnail">
+            <div class="images-choosen">
+            </div>
         </div>
         <div class="form-group">
             <label for="">コンテンツ</label>

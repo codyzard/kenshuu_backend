@@ -17,8 +17,10 @@
             </div>
         </div>
         <div class="article-main">
-            <?php if ($article['thumbnail_id'] !== NULL) : ?>
-                <div class="article__image"><img src="/public/assets/image/articles/<?php Helper::print_filtered($article['src']) ?>" alt="article-image"></div>
+            <?php if (!empty($images)) : ?>
+                <?php foreach ($images as $img) : ?>
+                    <div class="article__image"><img src="/public/assets/image/articles/<?php Helper::print_filtered($img['src']) ?>" alt="article-image"></div>
+                <?php endforeach ?>
             <?php endif ?>
             <p class="article__content"><?php Helper::print_filtered($article['content']) ?></p>
         </div>

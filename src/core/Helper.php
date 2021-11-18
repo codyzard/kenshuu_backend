@@ -43,18 +43,17 @@ class Helper
         print(htmlspecialchars($string, ENT_QUOTES));
     }
 
-    public static function store_image($file, $location)
+    public static function store_image($file, $error, $size, $location)
     {
         try {
-
             // 未定義である・複数ファイルである・$_FILES Corruption 攻撃を受けた
             // どれかに該当していれば不正なパラメータとして処理する
-            if (!isset($file['error']) || !is_int($file['error'])) {
+            if (!isset($error) || !is_int($error)) {
                 throw new RuntimeException('パラメータが不正です');
             }
 
             // $_FILES['upfile']['error']   
-            switch ($file['error']) {
+            switch ($error) {
                 case UPLOAD_ERR_OK: // OK
                     break;
                 case UPLOAD_ERR_NO_FILE:   // ファイル未選択
@@ -68,13 +67,13 @@ class Helper
 
             // ここで定義するサイズ上限のオーバーチェック
             // (必要がある場合のみ)
-            if ($file['size'] > 2000000) {  //file maxsize 2x10^6 byte ~ 2mb;
+            if ($size > 2000000) {  //file maxsize 2x10^6 byte ~ 2mb;
                 throw new RuntimeException('ファイルサイズが大きすぎます');
             }
             //mime_content_type:  return file extension
             //～すごいコード～
             if (!$ext = array_search(
-                mime_content_type($file['tmp_name']),
+                mime_content_type($file),
                 array(
                     'gif' => 'image/gif',
                     'jpg' => 'image/jpeg',
@@ -86,10 +85,10 @@ class Helper
             }
             // ファイルデータからSHA-1ハッシュを取ってファイル名を決定し，保存する
             if (!move_uploaded_file(
-                $file['tmp_name'],
+                $file,
                 $path = sprintf(
                     $location . '%s.%s',
-                    $filename = sha1_file($file['tmp_name']), //hash & get filename for return and save database
+                    $filename = sha1_file($file), //hash & get filename for return and save database
                     $ext
                 )
             )) {

@@ -16,9 +16,10 @@ class ArticleController extends BaseController
     public function show($id)
     {
         if (isset($id)) {
-            $article = $this->articleModel->find_by_id_join_table($id);
+            $article_with_images = $this->articleModel->find_by_id_join_table($id);
             return $this->view("articles.show", [
-                'article' => $article,
+                'article' => $article_with_images[0],
+                'images' => $article_with_images[1],
                 'id' => $id,
             ]);
         }
@@ -33,12 +34,13 @@ class ArticleController extends BaseController
         ]);
     }
 
-    public function create($article)
+    public function create()
     {
         if (isset($_POST['title']) && isset($_POST['content']) && isset($_POST['categories'])) {
             if (Helper::csrf_token_validate()) {
                 $title = trim($_POST['title']);
-                $thumbnail = $_FILES['thumbnail'];
+                $images = $_FILES['images'];
+                $thumbnail = $_POST['thumbnail'];
                 $content = trim($_POST['content']);
                 $categories_id = $_POST['categories'];
                 $author_id = 1;
@@ -46,7 +48,7 @@ class ArticleController extends BaseController
                     $_SESSION['errors']['blank'] = 'タイトル又はコンテンツが空自にすることはできません！';
                     header('Location: ' . $_SERVER['HTTP_REFERER']);
                 } else {
-                    $is_success = $this->articleModel->create_article($title, $thumbnail, $content, $categories_id, $author_id);
+                    $is_success = $this->articleModel->create_article($title, $images, $thumbnail, $content, $categories_id, $author_id);
                     if ($is_success) {
                         echo "<p>記事投稿が成功でした！</p>";
                         echo "<a href='" . $_SERVER['HTTP_REFERER'] . "'>Go back</a><br/>";

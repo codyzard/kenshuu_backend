@@ -853,6 +853,16 @@ option {
   width: 100%;
 }
 
+.images-choosen__item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 5px;
+}
+
 .input-error {
   background-color: beige;
 }
