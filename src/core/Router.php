@@ -10,7 +10,12 @@ class Router
 
     public function __construct()
     {
-        $url = $this->parseUrl();
+        $this->request_process();
+    }
+
+    public function request_process()
+    {
+        $url = $this->parse_url();
 
         if (file_exists('./controllers/' . ucfirst($url[0]) . 'Controller.php')) {
             $this->controller = ucfirst($url[0]) . 'Controller';
@@ -31,19 +36,17 @@ class Router
         call_user_func([$this->controller, $this->method], $this->params);
     }
 
-    public function parseUrl()
+    public function parse_url()
     {
         if (isset($_GET['url'])) {
             return explode('/', filter_var(rtrim($_GET['url'], '/'), FILTER_SANITIZE_URL));
         }
     }
 
-
-    // for defining url and method existed but not use yet
+    // for defining existed url and method,  but not use yet
     public function route($action, $callback)
     {
         $action = trim($action, '/');
         $this->routes[$action] = $callback;
     }
-
 }

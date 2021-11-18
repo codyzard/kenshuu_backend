@@ -3,8 +3,8 @@
 class ArticleModel extends BaseModel
 {
     //in future use class attribute for model. ex: article->title, article->content, etc...
-
     const TABLE = 'articles';
+    const PUBLIC_IMAGE_ARTICLE_PATH = '/public/assets/image/articles/';
     public function get_all_join_table()
     {
         $sql = "SELECT articles.id, title, thumbnail_id, articles.created_at, src, authors.fullname FROM articles
@@ -78,9 +78,9 @@ class ArticleModel extends BaseModel
             foreach ($images['tmp_name'] as $i => $img) {
                 if (file_exists($img)) {
 
-                    $location  = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/image/articles/'; // 'set location save image'
+                    $location  = $_SERVER['DOCUMENT_ROOT'] . self::PUBLIC_IMAGE_ARTICLE_PATH; // 'set location save image'
                     $image_name = Helper::store_image($img, $images['error'][$i], $images['size'][$i], $location); //get name file;
-                    $paths[]  = $location . $image_name;
+                    $paths[]  = $image_name;
 
 
                     //save thumbnail src in database;
@@ -119,7 +119,7 @@ class ArticleModel extends BaseModel
             // check query executed successfully?
             if (!$result_article || (isset($result_image) && !$result_image) || (isset($result_article_image) && !$result_article_image) || !$result_article_category) {
                 $this->connect->rollBack();
-                $this->roll_back_image($paths); // delete stored image when failed
+                $this->remove_image_from_storage($paths); // delete stored image when failed
                 return false;
             } else {
                 $this->connect->commit();
@@ -127,16 +127,23 @@ class ArticleModel extends BaseModel
             }
         } catch (PDOException $e) {
             $this->connect->rollBack();
-            $this->roll_back_image($paths); // delete stored image when failed
+            $this->remove_image_from_storage($paths); // delete stored image when failed
             echo 'Error: ' . $e->getMessage();
+            return false;
         }
     }
 
-    public function roll_back_image($paths = [])
+    public function remove_image_from_storage($paths = [])
     {
-        foreach ($paths as $p) {
-            unlink($p);
+        try {
+            foreach ($paths as $p) {
+                unlink($_SERVER['DOCUMENT_ROOT'] . self::PUBLIC_IMAGE_ARTICLE_PATH . $p);
+            }
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getMessage();
+            return false;
         }
+        return true;
     }
 
     public function delete_article($id)
@@ -146,21 +153,17 @@ class ArticleModel extends BaseModel
         $query_get = $this->prepare_query('SELECT src FROM images WHERE article_id = :id');
         $query_get->bindValue(':id', $id);
         $query_get->execute();
-        $result = $query_get->fetchAll(); // get src image for delete image from storage
+        $path = $query_get->fetchAll(PDO::FETCH_COLUMN); // get src image for delete image from storage
+
         //delete article
         $query_delete = $this->prepare_query('DELETE FROM articles WHERE id = :id');
         $query_delete->bindValue(':id', $id, PDO::PARAM_INT);
         if ($query_delete->execute()) {
-            if (!empty($result)) {
-                try {
-                    foreach ($result as $r) {
-                        unlink(__DIR__ . '/../public/assets/image/articles/' . $r['src']);
-                    }
-                    //  delete image from storage
+            if (!empty($path)) {
+                if ($this->remove_image_from_storage($path)) {
                     $this->connect->commit();
                     return true;
-                } catch (Exception $e) {
-                    echo 'Error: ' . $e->getMessage();
+                } else {
                     $this->connect->rollBack();
                     return false;
                 }
