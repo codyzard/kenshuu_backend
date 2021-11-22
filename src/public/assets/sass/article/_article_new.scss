@@ -41,9 +41,18 @@ option {
     width: 100%;
   }
 }
-.input-error{
+
+.images-choosen {
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+
+.input-error {
   background-color: beige;
-  .error-line{
+  .error-line {
     color: red;
     padding: 10px;
     font-size: 1.2rem;

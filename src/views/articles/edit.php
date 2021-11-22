@@ -8,7 +8,7 @@
             <?php unset($_SESSION['errors']) ?>
         </div>
     <?php endif ?>
-    <form class="form" action="/?controller=article&action=update&id=<?php Helper::print_filtered($id) ?>" method="POST" enctype="multipart/form-data">
+    <form class="form" action="/article/update/<?php Helper::print_filtered($id) ?>" method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?>">
         </div>

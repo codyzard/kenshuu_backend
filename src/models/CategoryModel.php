@@ -4,7 +4,7 @@ class CategoryModel extends BaseModel
 {
     const TABLE = 'categories';
     
-    public function getAll()
+    public function get_all()
     {
         $sql = 'SELECT * FROM ' . self::TABLE;
         $result = $this->query($sql);

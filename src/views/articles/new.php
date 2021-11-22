@@ -8,7 +8,7 @@
             <?php unset($_SESSION['errors']) ?>
         </div>
     <?php endif ?>
-    <form class="form" action="/?controller=article&action=create" method="POST" enctype="multipart/form-data">
+    <form class="form" action="/article/create" method="POST" enctype="multipart/form-data">
         <div class="form-group">
             <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?>">
         </div>
@@ -17,8 +17,13 @@
             <textarea name="title" id="title" cols="50" rows="3" placeholder="タイトルをつけて。。。" required></textarea>
         </div>
         <div class="form-group">
+            <label for="">イメージ</label>
+            <input type="file" accept="image/png, image/jpeg" name="images[]" id="images" multiple>
+        </div>
+        <div class="form-group">
             <label for="">サムネイル</label>
-            <input type="file" accept="image/png, image/jpeg" name="thumbnail" id="thumbnail">
+            <div class="images-choosen">
+            </div>
         </div>
         <div class="form-group">
             <label for="">コンテンツ</label>

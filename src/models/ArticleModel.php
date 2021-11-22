@@ -3,8 +3,8 @@
 class ArticleModel extends BaseModel
 {
     //in future use class attribute for model. ex: article->title, article->content, etc...
-
     const TABLE = 'articles';
+    const PUBLIC_IMAGE_ARTICLE_PATH = '/public/assets/image/articles/';
     public function get_all_join_table()
     {
         $sql = "SELECT articles.id, title, thumbnail_id, articles.created_at, src, authors.fullname FROM articles
@@ -16,14 +16,19 @@ class ArticleModel extends BaseModel
 
     public function find_by_id_join_table($id)
     {
-        $sql = "SELECT title, content, thumbnail_id, page_view, articles.created_at, src, authors.fullname FROM articles 
-                 LEFT JOIN images ON articles.thumbnail_id = images.id 
-                 INNER JOIN authors ON articles.author_id = authors.id 
-                 WHERE articles.id=:id ";
-        $query = $this->prepare_query($sql);
-        $query->bindValue(':id', $id, PDO::PARAM_INT);
-        $query->execute();
-        $article = $query->fetch();
+        $sql_article = "SELECT title, content, page_view, articles.created_at, authors.fullname FROM articles 
+                        INNER JOIN authors ON articles.author_id = authors.id 
+                        WHERE articles.id=:id ";
+        $query_article = $this->prepare_query($sql_article);
+        $query_article->bindValue(':id', $id, PDO::PARAM_INT);
+        $query_article->execute();
+        $article = $query_article->fetch();
+
+        $sql_images = "SELECT src FROM images WHERE article_id = :id";
+        $query_images = $this->prepare_query($sql_images);
+        $query_images->bindValue(":id", $id, PDO::PARAM_INT);
+        $query_images->execute();
+        $images = $query_images->fetchAll();
 
         $pv = intval($article['page_view']) + 1;
         $query_update = $this->prepare_query("UPDATE articles SET page_view = :pv WHERE id = :id");
@@ -31,7 +36,7 @@ class ArticleModel extends BaseModel
         $query_update->bindValue(':id', $id);
         $query_update->execute();
 
-        return $article;
+        return [$article, $images];
     }
 
     public function show_edit($id)
@@ -53,7 +58,7 @@ class ArticleModel extends BaseModel
         return $query->execute();
     }
 
-    public function create_article($title, $thumbnail, $content, $categories_id = [], $author_id)
+    public function create_article($title, $images, $thumbnail, $content, $categories_id = [], $author_id)
     {
         try {
             $this->connect->beginTransaction();
@@ -69,28 +74,36 @@ class ArticleModel extends BaseModel
             $created_article_id = $this->connect->lastInsertId();
 
             //Create thumbnail if param exists and save thumbnail id into article
-            if (file_exists($thumbnail['tmp_name'])) {
-                //save file in public
-                $location  = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/image/articles/'; // 'set location save image'
-                $image_name = Helper::store_image($thumbnail, $location); //get name file;
-                $path  = $location . $image_name;
+            $paths = []; // save path for when query failed, the stored image in storage will be rollbacked
+            foreach ($images['tmp_name'] as $i => $img) {
+                if (file_exists($img)) {
 
-                //save thumbnail src in database;
-                $sql_image = "INSERT INTO images (src, article_id, created_at, updated_at)
-                        VALUES (:src, :article_id, now(), now())";
-                $query_image = $this->prepare_query($sql_image);
-                $query_image->bindValue(":src", $image_name);
-                $query_image->bindValue(":article_id", $created_article_id);
-                $result_image = $query_image->execute();
-                $created_thumbnail_id = $this->connect->lastInsertId();
+                    $location  = $_SERVER['DOCUMENT_ROOT'] . self::PUBLIC_IMAGE_ARTICLE_PATH; // 'set location save image'
+                    $image_name = Helper::store_image($img, $images['error'][$i], $images['size'][$i], $location); //get name file;
+                    $paths[]  = $image_name;
 
 
-                //create relationship with article
-                $update_artcile = $this->prepare_query("UPDATE articles SET thumbnail_id = :thumbnail_id WHERE id = :article_id");
-                $update_artcile->bindValue(':thumbnail_id', $created_thumbnail_id, PDO::PARAM_INT);
-                $update_artcile->bindValue(':article_id', $created_article_id, PDO::PARAM_INT);
-                $result_article_image = $update_artcile->execute();
+                    //save thumbnail src in database;
+                    $sql_image = "INSERT INTO images (src, article_id, created_at, updated_at)
+                                VALUES (:src, :article_id, now(), now())";
+                    $query_image = $this->prepare_query($sql_image);
+                    $query_image->bindValue(":src", $image_name);
+                    $query_image->bindValue(":article_id", $created_article_id);
+                    $result_image = $query_image->execute();
+
+                    // check selected thumbnail 
+                    if ($images['name'][$i] == $thumbnail) { //['name']: array of name image in local
+                        $created_thumbnail_id = $this->connect->lastInsertId();
+
+                        //save thumbnail_id into articles
+                        $update_artcile = $this->prepare_query("UPDATE articles SET thumbnail_id = :thumbnail_id WHERE id = :article_id");
+                        $update_artcile->bindValue(':thumbnail_id', $created_thumbnail_id, PDO::PARAM_INT);
+                        $update_artcile->bindValue(':article_id', $created_article_id, PDO::PARAM_INT);
+                        $result_article_image = $update_artcile->execute();
+                    }
+                }
             }
+
 
             //Add categories for article
             $result_article_category = [];
@@ -106,7 +119,7 @@ class ArticleModel extends BaseModel
             // check query executed successfully?
             if (!$result_article || (isset($result_image) && !$result_image) || (isset($result_article_image) && !$result_article_image) || !$result_article_category) {
                 $this->connect->rollBack();
-                unlink($path); // delete stored image when failed
+                $this->remove_image_from_storage($paths); // delete stored image when failed
                 return false;
             } else {
                 $this->connect->commit();
@@ -114,29 +127,44 @@ class ArticleModel extends BaseModel
             }
         } catch (PDOException $e) {
             $this->connect->rollBack();
-            unlink($path); // delete stored image when failed
+            $this->remove_image_from_storage($paths); // delete stored image when failed
             echo 'Error: ' . $e->getMessage();
+            return false;
         }
+    }
+
+    public function remove_image_from_storage($paths = [])
+    {
+        try {
+            foreach ($paths as $p) {
+                unlink($_SERVER['DOCUMENT_ROOT'] . self::PUBLIC_IMAGE_ARTICLE_PATH . $p);
+            }
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getMessage();
+            return false;
+        }
+        return true;
     }
 
     public function delete_article($id)
     {
+        $this->connect->beginTransaction();
         //get image src
-        $query_get = $this->prepare_query('SELECT src FROM articles INNER JOIN images ON articles.thumbnail_id = images.id WHERE articles.id = :id');
+        $query_get = $this->prepare_query('SELECT src FROM images WHERE article_id = :id');
         $query_get->bindValue(':id', $id);
         $query_get->execute();
-        $src = $query_get->fetch()[0]; // get src image for delete image from storage
+        $path = $query_get->fetchAll(PDO::FETCH_COLUMN); // get src image for delete image from storage
 
         //delete article
         $query_delete = $this->prepare_query('DELETE FROM articles WHERE id = :id');
         $query_delete->bindValue(':id', $id, PDO::PARAM_INT);
         if ($query_delete->execute()) {
-            if (!empty($src)) {
-                try {
-                    unlink(__DIR__ . '/../public/assets/image/articles/' . $src); //  delete image from storage
+            if (!empty($path)) {
+                if ($this->remove_image_from_storage($path)) {
+                    $this->connect->commit();
                     return true;
-                } catch (Exception $e) {
-                    echo 'Error: ' . $e->getMessage();
+                } else {
+                    $this->connect->rollBack();
                     return false;
                 }
             } else return true;
