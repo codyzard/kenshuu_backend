@@ -15,7 +15,7 @@
                     <a href="#">配信を依頼</a>
                 </li>
                 <li class="release__item release__item--login">
-                    <a href="#" class="disabled">ログイン</a>
+                    <a href="/auth/login" class="disabled">ログイン</a>
                 </li>
             </ul>
             <div class="search-box">

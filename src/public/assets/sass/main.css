@@ -1049,4 +1049,152 @@ button {
 }
 
 /* end Articles */
+/* Auth */
+.session {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.login,
+.register {
+  margin: 100px auto;
+  width: 380px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: solid 3px #f2f2f2;
+  -webkit-box-shadow: 5px 5px 10px -4px #24436f;
+          box-shadow: 5px 5px 10px -4px #24436f;
+  padding: 30px;
+}
+
+.login h3,
+.register h3 {
+  font-size: 1.5rem;
+}
+
+.login form,
+.register form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.login form .form-group,
+.register form .form-group {
+  color: #a2a2a2;
+  position: relative;
+  margin: 0 5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.login form .form-group input[type="checkbox"],
+.register form .form-group input[type="checkbox"] {
+  -webkit-transform: scale(1.5);
+          transform: scale(1.5);
+}
+
+.login form .form-group label,
+.register form .form-group label {
+  margin: auto 10px;
+  font-size: 13px;
+  width: 100%;
+}
+
+.login form .form-group .form-control,
+.register form .form-group .form-control {
+  width: 100%;
+  height: 40px;
+  padding: 10px 45px;
+  font-size: 13px;
+  border: 1px solid #dfdfdf;
+}
+
+.login form .form-group i,
+.register form .form-group i {
+  position: absolute;
+  top: 25px;
+  left: 18px;
+}
+
+.login form .form-group span,
+.register form .form-group span {
+  position: absolute;
+  top: 20px;
+  right: 18px;
+  font-size: 13px;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.login form input,
+.register form input {
+  margin: 10px 0;
+}
+
+.login form input[type="button"], .login form input[type="submit"],
+.register form input[type="button"],
+.register form input[type="submit"] {
+  cursor: pointer;
+}
+
+.login form input.btn-submit,
+.register form input.btn-submit {
+  border: none;
+  background-color: #f26600;
+  color: #ffffff;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  padding: 30px 110px;
+}
+
+.login form input.btn-res,
+.register form input.btn-res {
+  border: none;
+  background-color: #ffffff;
+  color: #f26600;
+  font-size: 1.5rem;
+  border-radius: 5px;
+  border: 1px solid #f26600;
+  padding: 10px 110px;
+}
+
+.login form input.btn-res:hover,
+.register form input.btn-res:hover {
+  color: #ffffff;
+  background-color: #f26600;
+}
+
+.login form a,
+.register form a {
+  font-size: 14px;
+  display: inline-block;
+  color: #3081c9;
+  text-align: right;
+}
+
+.login .description,
+.register .description {
+  color: #a2a2a2;
+  font-size: 13px;
+}
+
+/* end Auth */
 /*# sourceMappingURL=main.css.map */
