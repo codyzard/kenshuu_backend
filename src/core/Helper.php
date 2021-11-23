@@ -107,4 +107,17 @@ class Helper
             echo $e->getMessage();
         }
     }
+
+    public static function remove_image_from_storage($filesName = [], $pathImage)
+    {
+        try {
+            foreach ($filesName as $fn) {
+                unlink($_SERVER['DOCUMENT_ROOT'] . $pathImage . $fn);
+            }
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getMessage();
+            return false;
+        }
+        return true;
+    }
 }

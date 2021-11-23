@@ -14,9 +14,19 @@
                 <li class="release__item release__item--company">
                     <a href="#">配信を依頼</a>
                 </li>
-                <li class="release__item release__item--login">
-                    <a href="/auth/login" class="disabled">ログイン</a>
-                </li>
+                <?php if (isset($_SESSION['user'])) : ?>
+                    <li class="release__item release__item--logged">
+                        <a href="#" class="disabled">管理画面</a>
+                        <ul class="profile-manager">
+                            <li class="profile-manager__item"><a class="disabled" href="#">プロフィール</a></li>
+                            <li class="profile-manager__item"><a class="disabled" href="#">ログアウト</a></li>
+                        </ul>
+                    </li>
+                <?php else : ?>
+                    <li class="release__item release__item--login">
+                        <a href="/auth/login" class="disabled">ログイン</a>
+                    </li>
+                <?php endif ?>
             </ul>
             <div class="search-box">
                 <input type="text" placeholder="キーワードで検索" class="input--radius" />

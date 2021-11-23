@@ -1,14 +1,21 @@
 <div class="session">
     <div class="register">
+        <?php if (!empty($_SESSION['errors'])) : ?>
+            <div class="flash flash--danger">
+                <?php foreach ($_SESSION['errors'] as $err) : ?>
+                    <p class="message"><?php Helper::print_filtered($err)  ?></p>
+                <?php endforeach ?>
+                <?php unset($_SESSION['errors']) ?>
+            </div>
+        <?php endif ?>
         <h3>ユーザーレジスター</h3>
-        <form action="register_process.php" method="POST">
+        <form action="/auth/create" method="POST" enctype="multipart/form-data">
             <div class="form-group">
-                <input type="email" name="email" id="email" class="form-control" placeholder="メールアドレス" required />
-                <i class="far fa-envelope fa-lg"></i>
+                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?>">
             </div>
             <div class="form-group">
-                <input type="text" name="username" id="username" class="form-control" placeholder="ユーザーネーム" />
-                <i class="fas fa-user"></i>
+                <input type="email" name="email" id="email" class="form-control" placeholder="メールアドレス" value="<?php $_POST['email'] ?: "" ?>" required />
+                <i class="far fa-envelope fa-lg"></i>
             </div>
             <div class="form-group">
                 <input type="text" name="name" id="name" class="form-control" placeholder="名前" required />

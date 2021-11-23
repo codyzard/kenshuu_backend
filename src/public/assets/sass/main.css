@@ -122,15 +122,16 @@ button {
 }
 
 .flash {
-  width: 29%;
   padding: 15px 20px;
   border-radius: 5px;
   margin: 0 auto;
-  text-align: center;
+  margin-bottom: 10px;
 }
 
 .flash .message {
   font-size: 1.2rem;
+  list-style: disc outside none;
+  display: list-item;
 }
 
 .flash--success {
@@ -217,6 +218,47 @@ header {
 
 .release__item a:hover {
   text-decoration: underline;
+}
+
+.release__item--logged {
+  position: relative;
+}
+
+.release__item--logged:hover > .profile-manager {
+  opacity: 1;
+  z-index: 1;
+}
+
+.profile-manager {
+  position: absolute;
+  top: 24px;
+  right: -15px;
+  width: 85px;
+  height: 45px;
+  padding: 4px 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 3px;
+  background-color: #345583;
+  border-radius: 5px;
+  border-top: 1px solid white;
+  color: white;
+  opacity: 0;
+  z-index: -1;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+}
+
+.profile-manager__item a {
+  font-size: 1.1rem;
 }
 
 .search-box {
@@ -770,15 +812,16 @@ button {
 }
 
 .flash {
-  width: 29%;
   padding: 15px 20px;
   border-radius: 5px;
   margin: 0 auto;
-  text-align: center;
+  margin-bottom: 10px;
 }
 
 .flash .message {
   font-size: 1.2rem;
+  list-style: disc outside none;
+  display: list-item;
 }
 
 .flash--success {
@@ -963,15 +1006,16 @@ button {
 }
 
 .flash {
-  width: 29%;
   padding: 15px 20px;
   border-radius: 5px;
   margin: 0 auto;
-  text-align: center;
+  margin-bottom: 10px;
 }
 
 .flash .message {
   font-size: 1.2rem;
+  list-style: disc outside none;
+  display: list-item;
 }
 
 .flash--success {

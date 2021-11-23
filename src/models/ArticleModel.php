@@ -119,7 +119,7 @@ class ArticleModel extends BaseModel
             // check query executed successfully?
             if (!$result_article || (isset($result_image) && !$result_image) || (isset($result_article_image) && !$result_article_image) || !$result_article_category) {
                 $this->connect->rollBack();
-                $this->remove_image_from_storage($paths); // delete stored image when failed
+                Helper::remove_image_from_storage($paths, self::PUBLIC_IMAGE_ARTICLE_PATH); // delete stored image when failed
                 return false;
             } else {
                 $this->connect->commit();
@@ -127,24 +127,13 @@ class ArticleModel extends BaseModel
             }
         } catch (PDOException $e) {
             $this->connect->rollBack();
-            $this->remove_image_from_storage($paths); // delete stored image when failed
+            Helper::remove_image_from_storage($paths, self::PUBLIC_IMAGE_ARTICLE_PATH); // delete stored image when failed
             echo 'Error: ' . $e->getMessage();
             return false;
         }
     }
 
-    public function remove_image_from_storage($paths = [])
-    {
-        try {
-            foreach ($paths as $p) {
-                unlink($_SERVER['DOCUMENT_ROOT'] . self::PUBLIC_IMAGE_ARTICLE_PATH . $p);
-            }
-        } catch (Exception $e) {
-            echo 'Error: ' . $e->getMessage();
-            return false;
-        }
-        return true;
-    }
+
 
     public function delete_article($id)
     {
@@ -160,7 +149,7 @@ class ArticleModel extends BaseModel
         $query_delete->bindValue(':id', $id, PDO::PARAM_INT);
         if ($query_delete->execute()) {
             if (!empty($path)) {
-                if ($this->remove_image_from_storage($path)) {
+                if (Helper::remove_image_from_storage($path, self::PUBLIC_IMAGE_ARTICLE_PATH)) {
                     $this->connect->commit();
                     return true;
                 } else {

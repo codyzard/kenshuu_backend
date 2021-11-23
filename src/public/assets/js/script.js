@@ -26,7 +26,7 @@ $(document).ready(function () {
       $(".images-choosen").append(file_group);
     });
   });
-  
+
   // create condition show/hidden password
   $(".show-hide-pw").each(function () {
     let show_pw_btn = this;
@@ -40,5 +40,13 @@ $(document).ready(function () {
         show_pw_btn.textContent = "表示";
       }
     });
+  });
+
+  //register check password matched
+  $("#submit-register").click((e) => {
+    if ($("#password").val() !== $("#cpassword").val()) {
+      alert("パスワードとコンファメーションは一致しません！");
+      e.preventDefault();
+    }
   });
 });
