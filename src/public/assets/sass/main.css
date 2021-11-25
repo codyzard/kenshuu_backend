@@ -37,9 +37,14 @@ button {
   cursor: pointer;
 }
 
-.clock-icon--size {
+.clock-icon--small {
   width: 10px;
   height: 10px;
+}
+
+.clock-icon--medium {
+  width: 15px;
+  height: 15px;
 }
 
 .input--radius {
@@ -727,9 +732,14 @@ button {
   cursor: pointer;
 }
 
-.clock-icon--size {
+.clock-icon--small {
   width: 10px;
   height: 10px;
+}
+
+.clock-icon--medium {
+  width: 15px;
+  height: 15px;
 }
 
 .input--radius {
@@ -921,9 +931,14 @@ button {
   cursor: pointer;
 }
 
-.clock-icon--size {
+.clock-icon--small {
   width: 10px;
   height: 10px;
+}
+
+.clock-icon--medium {
+  width: 15px;
+  height: 15px;
 }
 
 .input--radius {
@@ -1050,6 +1065,25 @@ button {
 
 .article__time, .article__author, .article__view, .article__content {
   font-size: inherit;
+}
+
+.article__time {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 5px;
+}
+
+.article__author a {
+  color: #31b0d5;
+}
+
+.article__author a:hover {
+  color: #a2a2a2;
+  text-decoration: underline;
 }
 
 .article .sub-info {
@@ -1238,6 +1272,118 @@ button {
 .register .description {
   color: #a2a2a2;
   font-size: 13px;
+}
+
+.profile {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 30px;
+  margin: 50px 0;
+}
+
+.profile .main-profile {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.profile__avatar {
+  position: relative;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  margin: 0 auto;
+}
+
+.profile__avatar img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+
+.profile__avatar .tooltip {
+  background-color: #3b3b3b;
+  color: white;
+  border-radius: 8px;
+  padding: 10px;
+  top: 0;
+  right: -85px;
+  position: absolute;
+  opacity: 0;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+.profile .change-avatar:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.profile .change-avatar:hover > .tooltip {
+  opacity: 1;
+}
+
+.profile__name {
+  font-size: 3.6rem;
+  text-align: center;
+}
+
+.profile__contribution {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  text-align: center;
+}
+
+.profile__contribution__title {
+  font-size: 1.1rem;
+}
+
+.profile__contribution__number {
+  font-size: 2.4rem;
+}
+
+.profile .sub-profile {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 10px;
+}
+
+.profile__address, .profile__birthday, .profile__phone {
+  font-size: 2rem;
+}
+
+.profile__address span, .profile__birthday span, .profile__phone span {
+  font-size: inherit;
 }
 
 /* end Auth */

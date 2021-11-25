@@ -5,9 +5,14 @@ button {
   cursor: pointer;
 }
 
-.clock-icon--size {
+.clock-icon--small {
   width: 10px;
   height: 10px;
+}
+
+.clock-icon--medium {
+  width: 15px;
+  height: 15px;
 }
 
 .input--radius {

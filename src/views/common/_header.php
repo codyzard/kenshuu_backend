@@ -18,7 +18,7 @@
                     <li class="release__item release__item--logged">
                         <a href="#" class="disabled">管理画面</a>
                         <ul class="profile-manager">
-                            <li class="profile-manager__item"><a class="disabled" href="#">プロフィール</a></li>
+                            <li class="profile-manager__item"><a class="disabled" href="/auth/profile/<?php Helper::print_filtered($_SESSION['user']['id']) ?>">プロフィール</a></li>
                             <li class="profile-manager__item"><a class="disabled" href="/auth/logout">ログアウト</a></li>
                         </ul>
                     </li>

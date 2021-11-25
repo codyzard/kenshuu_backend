@@ -47,7 +47,7 @@ class AuthorModel extends BaseModel
 
                 // save image into database
                 $update_author = $this->prepare_query("UPDATE authors SET avatar = :avatar WHERE id = :author_id");
-                $update_author->bindValue(':avatar', $image_name, PDO::PARAM_INT);
+                $update_author->bindValue(':avatar', $image_name);
                 $update_author->bindValue(':author_id', $created_author_id, PDO::PARAM_INT);
                 $result_avatar = $update_author->execute();
             }
@@ -94,5 +94,14 @@ class AuthorModel extends BaseModel
         } else {
             $_SESSION['errors']['email'] = 'このEメールは存在しない！';
         }
+    }
+
+    public function get_profile($id)
+    {
+        $query_profile = $this->prepare_query("SELECT authors.*, COUNT(articles.id) FROM authors INNER JOIN articles ON articles.author_id = authors.id WHERE authors.id = :id LIMIT 1");
+        $query_profile->bindValue(':id', $id);
+        $query_profile->execute();
+        $result_profile = $query_profile->fetch();
+        return $result_profile;
     }
 }

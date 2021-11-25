@@ -189,7 +189,7 @@
                         </a>
                         <div class="articles__stamp">
                             <p class="articles__time">
-                                <img src="./public/assets/image/icon.png" class="clock-icon clock-icon--size" alt="time-stamp" />
+                                <img src="./public/assets/image/icon.png" class="clock-icon clock-icon--small" alt="time-stamp" />
                                 <?php Helper::print_filtered($article['created_at']) ?>
                             </p>
                             <a href="#" class="articles__company-release"><?php Helper::print_filtered($article['fullname']) ?></a>

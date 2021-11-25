@@ -35,6 +35,21 @@ class AuthController extends BaseController
         header('Location: /');
     }
 
+    public function profile($id)
+    {
+        if (isset($id)) {
+            $profile = $this->authorModel->get_profile($id);
+            if (!$profile) {
+                $_SESSION['errors']['profile'] = "プロフィールが取得できません！";
+                header('Location: /');
+            } else {
+                return $this->view("auth.profile", [
+                    "profile" => $profile,
+                ]);
+            }
+        }
+    }
+
     public function create()
     {
         $flag = true; // for validate
