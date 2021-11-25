@@ -1,7 +1,15 @@
 <div class="session">
     <div class="login">
+        <?php if (!empty($_SESSION['errors'])) : ?>
+            <div class="flash flash--danger">
+                <?php foreach ($_SESSION['errors'] as $err) : ?>
+                    <p class="message"><?php Helper::print_filtered($err)  ?></p>
+                <?php endforeach ?>
+                <?php unset($_SESSION['errors']) ?>
+            </div>
+        <?php endif ?>
         <h3>ユーザーログイン</h3>
-        <form action="login_process.php" method="POST">
+        <form action="/auth/new_session" method="POST">
             <div class="form-group">
                 <input type="email" name="email" id="email" class="form-control" placeholder="メールアドレス" required />
                 <i class="far fa-envelope fa-lg"></i>

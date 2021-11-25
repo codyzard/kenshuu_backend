@@ -73,4 +73,26 @@ class AuthorModel extends BaseModel
             return false;
         }
     }
+
+    public function find_user($email, $password)
+    {
+        $query_check_email_exist = $this->prepare_query("SELECT COUNT(*) FROM authors WHERE email = :email");
+        $query_check_email_exist->bindValue(':email', $email);
+        $query_check_email_exist->execute();
+        $result_email = $query_check_email_exist->fetch();
+        if ($result_email[0] > 0) {
+            $query_new_session = $this->prepare_query("SELECT * FROM authors WHERE email = :email AND password = :password");
+            $query_new_session->bindValue(":email", $email);
+            $query_new_session->bindValue(":password", md5($password));
+            $query_new_session->execute();
+            $result_new_session = $query_new_session->fetchAll();
+            if (count($result_new_session) > 0) {
+                return $result_new_session[0];
+            }
+            $_SESSION['errors']['password'] = 'パスワードは間違いました！';
+            return false;
+        } else {
+            $_SESSION['errors']['email'] = 'このEメールは存在しない！';
+        }
+    }
 }
