@@ -26,6 +26,15 @@ class AuthController extends BaseController
         return $this->view('auth.register');
     }
 
+    public function logout()
+    {
+        if (!empty(session_id()) && isset($_SESSION['user'])) {
+            session_regenerate_id(); // renew session id
+            session_destroy(); // clear user's data in session
+        }
+        header('Location: /');
+    }
+
     public function create()
     {
         $flag = true; // for validate

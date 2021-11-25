@@ -19,7 +19,7 @@
                         <a href="#" class="disabled">管理画面</a>
                         <ul class="profile-manager">
                             <li class="profile-manager__item"><a class="disabled" href="#">プロフィール</a></li>
-                            <li class="profile-manager__item"><a class="disabled" href="#">ログアウト</a></li>
+                            <li class="profile-manager__item"><a class="disabled" href="/auth/logout">ログアウト</a></li>
                         </ul>
                     </li>
                 <?php else : ?>
