@@ -11,6 +11,9 @@
         <h3>ユーザーログイン</h3>
         <form action="/auth/new_session" method="POST">
             <div class="form-group">
+                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?>">
+            </div>
+            <div class="form-group">
                 <input type="email" name="email" id="email" class="form-control" placeholder="メールアドレス" required />
                 <i class="far fa-envelope fa-lg"></i>
             </div>

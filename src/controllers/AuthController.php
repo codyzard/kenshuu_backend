@@ -12,6 +12,7 @@ class AuthController extends BaseController
 
     public function login()
     {
+        Helper::create_csrf_token();
         if (isset($_SESSION['user'])) {
             header('Location: /');
         }
@@ -20,6 +21,7 @@ class AuthController extends BaseController
 
     public function register()
     {
+        Helper::create_csrf_token();
         if (isset($_SESSION['user'])) {
             header('Location: /');
         }
