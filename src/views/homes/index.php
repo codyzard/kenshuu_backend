@@ -168,6 +168,14 @@
                     <?php echo Helper::flash_message($_SESSION['messages']) ?>
                 </div>
             <?php endif ?>
+            <?php if (!empty($_SESSION['errors'])) : ?>
+                <div class="flash flash--danger">
+                    <?php foreach ($_SESSION['errors'] as $err) : ?>
+                        <p class="message"><?php Helper::print_filtered($err)  ?></p>
+                    <?php endforeach ?>
+                    <?php unset($_SESSION['errors']) ?>
+                </div>
+            <?php endif ?>
             <ul class="articles">
                 <?php foreach ($articles as $article) : ?>
                     <li class="articles__item">

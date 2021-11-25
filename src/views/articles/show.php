@@ -26,7 +26,9 @@
         </div>
     </div>
     <div class="control">
-        <a class="btn btn--warning btn--radius" href="/article/edit/<?php Helper::print_filtered($id) ?>">変更</a>
-        <a class="btn btn--danger btn--radius" onclick="return confirm('Are you sure?')" href="/article/delete/<?php Helper::print_filtered($id) ?>">削除</a>
+        <?php if ($_SESSION['user']['id'] === $article['author_id']) : ?>
+            <a class="btn btn--warning btn--radius" href="/article/edit/<?php Helper::print_filtered($id) ?>">変更</a>
+            <a class="btn btn--danger btn--radius" onclick="return confirm('Are you sure?')" href="/article/delete/<?php Helper::print_filtered($id) ?>">削除</a>
+        <?php endif ?>
     </div>
 </div>

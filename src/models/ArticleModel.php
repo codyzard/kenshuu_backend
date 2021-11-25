@@ -14,9 +14,18 @@ class ArticleModel extends BaseModel
         return $result->fetchAll();
     }
 
+    public function get_author_id($id)
+    {
+        $query_article = $this->prepare_query("SELECT author_id FROM articles WHERE id = :id");
+        $query_article->bindValue(':id', $id, PDO::PARAM_INT);
+        $query_article->execute();
+        $article = $query_article->fetch();
+        return $article['author_id'];
+    }
+
     public function find_by_id_join_table($id)
     {
-        $sql_article = "SELECT title, content, page_view, articles.created_at, authors.fullname FROM articles 
+        $sql_article = "SELECT title, content, page_view, articles.created_at, authors.fullname, author_id FROM articles 
                         INNER JOIN authors ON articles.author_id = authors.id 
                         WHERE articles.id=:id ";
         $query_article = $this->prepare_query($sql_article);
@@ -133,8 +142,6 @@ class ArticleModel extends BaseModel
         }
     }
 
-
-
     public function delete_article($id)
     {
         $this->connect->beginTransaction();
@@ -156,7 +163,10 @@ class ArticleModel extends BaseModel
                     $this->connect->rollBack();
                     return false;
                 }
-            } else return true;
+            } else {
+                $this->connect->commit();
+                return true;
+            }
         } else return false;
     }
 }
