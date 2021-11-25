@@ -93,6 +93,7 @@ class AuthorModel extends BaseModel
             return false;
         } else {
             $_SESSION['errors']['email'] = 'このEメールは存在しない！';
+            return false;
         }
     }
 
