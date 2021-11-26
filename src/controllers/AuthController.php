@@ -52,6 +52,19 @@ class AuthController extends BaseController
         }
     }
 
+    public function update_avatar()
+    {
+        if ($_SESSION['user']['id'] == $_POST['author_id']) {
+            $author_id = $_POST['author_id'];
+            $avatar = $_FILES;
+            $src_updated =  $this->authorModel->update_avatar($author_id, $avatar['file']);
+            if ($src_updated) {
+                echo $src_updated; // return new_avatar_src
+            }
+            echo false;
+        }
+    }
+
     public function create()
     {
         $flag = true; // for validate

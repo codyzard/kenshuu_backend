@@ -39,17 +39,11 @@ class AuthorModel extends BaseModel
             $result_author = $query_author->execute();
             $created_author_id = $this->connect->lastInsertId();
 
-            if (file_exists($avatar['tmp_name'])) {
-                // save image into storage
-                $location  = $_SERVER['DOCUMENT_ROOT'] . self::PUBLIC_IMAGE_AUTHOR_PATH; // 'set location save image'
-                $image_name = Helper::store_image($avatar['tmp_name'], $avatar['error'], $avatar['size'], $location); //get name file;
-                $paths[]  = $image_name;
-
-                // save image into database
-                $update_author = $this->prepare_query("UPDATE authors SET avatar = :avatar WHERE id = :author_id");
-                $update_author->bindValue(':avatar', $image_name);
-                $update_author->bindValue(':author_id', $created_author_id, PDO::PARAM_INT);
-                $result_avatar = $update_author->execute();
+            //create avatar
+            $result_update_avatar = $this->insert_avatar($created_author_id, $avatar);
+            if ($result_update_avatar) {  //$result_update_avatar != false
+                $paths = $result_update_avatar[1];
+                $result_avatar = $result_update_avatar[2];
             }
 
             if (!$result_author || (isset($result_avatar) && !$result_avatar)) {
@@ -99,10 +93,62 @@ class AuthorModel extends BaseModel
 
     public function get_profile($id)
     {
-        $query_profile = $this->prepare_query("SELECT authors.*, COUNT(articles.id) FROM authors INNER JOIN articles ON articles.author_id = authors.id WHERE authors.id = :id LIMIT 1");
-        $query_profile->bindValue(':id', $id);
+        $query_profile = $this->prepare_query("SELECT authors.*, COUNT(articles.id) FROM authors LEFT JOIN articles ON articles.author_id = authors.id WHERE authors.id = :id LIMIT 1");
+        $query_profile->bindValue(':id', $id, PDO::PARAM_INT);
         $query_profile->execute();
         $result_profile = $query_profile->fetch();
         return $result_profile;
+    }
+
+    public function update_avatar($id, $avatar)
+    {
+        try {
+            $this->connect->beginTransaction();
+
+            $query_avatar_src = $this->prepare_query("SELECT avatar FROM authors WHERE id = :id");
+            $query_avatar_src->bindValue(':id', $id, PDO::PARAM_INT);
+            $query_avatar_src->execute();
+            $result_avatar_src = $query_avatar_src->fetch();
+            $paths_avatar[] = $result_avatar_src[0];
+
+            //remove old avatar if had
+            if ($result_avatar_src[0]) {
+                Helper::remove_image_from_storage($paths_avatar, self::PUBLIC_IMAGE_AUTHOR_PATH);
+            }
+
+            $result_update_avatar = $this->insert_avatar($id, $avatar); //save new avatar into database
+
+            if ($result_update_avatar[2]) {
+                $this->connect->commit();
+                return ($result_update_avatar[0]); // return src;
+            } else {
+                $this->connect->rollBack();
+                Helper::remove_image_from_storage($result_update_avatar[1], self::PUBLIC_IMAGE_AUTHOR_PATH);
+                return false;
+            }
+        } catch (PDOException $e) {
+            Helper::remove_image_from_storage($result_update_avatar[1], self::PUBLIC_IMAGE_AUTHOR_PATH);
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    public function insert_avatar($id, $avatar)
+    {
+        if (file_exists($avatar['tmp_name'])) {
+            // save image into storage
+            $location  = $_SERVER['DOCUMENT_ROOT'] . self::PUBLIC_IMAGE_AUTHOR_PATH; // 'set location save image'
+            $image_name = Helper::store_image($avatar['tmp_name'], $avatar['error'], $avatar['size'], $location); //get name file;
+            $paths[]  = $image_name;
+
+            // save image into database
+            $update_author = $this->prepare_query("UPDATE authors SET avatar = :avatar WHERE id = :author_id");
+            $update_author->bindValue(':avatar', $image_name);
+            $update_author->bindValue(':author_id', $id, PDO::PARAM_INT);
+            $result_avatar = $update_author->execute();
+
+            return [$image_name, $paths, $result_avatar]; // 0: include image_name, 1: array image_name, 2: result_sql(true or false)
+        }
+        return false;
     }
 }

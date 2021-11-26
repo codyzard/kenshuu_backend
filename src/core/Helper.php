@@ -112,7 +112,9 @@ class Helper
     {
         try {
             foreach ($filesName as $fn) {
-                unlink($_SERVER['DOCUMENT_ROOT'] . $pathImage . $fn);
+                if (file_exists($_SERVER['DOCUMENT_ROOT'] . $pathImage . $fn)) { //check file exist before remove
+                    unlink($_SERVER['DOCUMENT_ROOT'] . $pathImage . $fn);
+                }
             }
         } catch (Exception $e) {
             echo 'Error: ' . $e->getMessage();

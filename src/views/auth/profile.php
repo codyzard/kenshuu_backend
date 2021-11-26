@@ -1,8 +1,8 @@
 <div class="profile">
     <div class="main-profile">
         <label for="<?php echo $_SESSION['user']['id'] === $profile['id'] ? 'profile-change' : '' ?>" class="profile__avatar <?php echo $_SESSION['user']['id'] === $profile['id'] ? 'change-avatar' : '' ?>">
-            <img src="/public/assets/image/authors/<?php Helper::print_filtered($profile['avatar'] ?: "../default-avatar.png") ?>" alt="">
-            <input type="file" class="form-control" id="profile-change" hidden> <!-- will use for change avatar by Ajax-->
+            <img src="/public/assets/image/authors/<?php Helper::print_filtered($profile['avatar'] && file_exists($_SERVER['DOCUMENT_ROOT'] . "/public/assets/image/authors/" . $profile['avatar']) ? $profile['avatar'] : "../default-avatar.png") ?>" alt="">
+            <input name="update_avatar" type="file" class="form-control" id="profile-change" hidden> <!-- will use for change avatar by Ajax-->
             <p class="tooltip">アバターを変更する？</p>
         </label>
         <p class="profile__name"><?php Helper::print_filtered($profile['fullname']) ?></p>

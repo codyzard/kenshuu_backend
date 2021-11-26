@@ -49,4 +49,29 @@ $(document).ready(function () {
       e.preventDefault();
     }
   });
+
+  //update profile avatar by AJAX
+  $("#profile-change").on("change", function () {
+    let author_id = window.location.pathname.split("/").pop();
+    let selected_avatar = this.files[0];
+    let form_data = new FormData();
+    form_data.append("author_id", author_id);
+    form_data.append("file", selected_avatar);
+    $.ajax({
+      url: "/auth/update_avatar",
+      type: "POST",
+      contentType: false,
+      processData: false,
+      data: form_data,
+      success: function (data) {
+        $(".profile__avatar img").attr(
+          "src",
+          "/public/assets/image/authors/" + data
+        );
+      },
+      error: function (err) {
+        console.log(err);
+      },
+    });
+  });
 });
