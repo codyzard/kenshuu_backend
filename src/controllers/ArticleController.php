@@ -171,7 +171,7 @@ class ArticleController extends BaseController
             return true;
         } else {
             $_SESSION['errors']['login'] = 'ログインが必要です！';
-            header('Location: /auth/login');
+            header('Location: /authentication/login');
             return false;
         }
     }

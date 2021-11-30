@@ -122,4 +122,25 @@ class Helper
         }
         return true;
     }
+
+    /**
+     * store author's data in session
+     *
+     * @param  mixed $new_session
+     * @return void
+     */
+    public static function store_user_data_in_session($new_session)
+    {
+        if (!$new_session) {
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+        } else {
+            if (empty(session_id())) {
+                session_start();
+            }
+            $_SESSION['user']['id'] = $new_session['id'];
+            $_SESSION['user']['email'] = $new_session['email'];
+            $_SESSION['user']['fullname'] = $new_session['fullname'];
+            header('Location: /');
+        }
+    }
 }

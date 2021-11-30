@@ -9,7 +9,7 @@
             </div>
         <?php endif ?>
         <h3>ユーザーログイン</h3>
-        <form action="/auth/new_session" method="POST">
+        <form action="/authentication/new_session" method="POST">
             <div class="form-group">
                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?>">
             </div>

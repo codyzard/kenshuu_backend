@@ -9,7 +9,7 @@
             </div>
         <?php endif ?>
         <h3>ユーザーレジスター</h3>
-        <form action="/auth/create" method="POST" enctype="multipart/form-data">
+        <form action="/author/create" method="POST" enctype="multipart/form-data">
             <div class="form-group">
                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?>">
             </div>

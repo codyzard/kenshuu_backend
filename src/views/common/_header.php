@@ -18,13 +18,13 @@
                     <li class="release__item release__item--logged">
                         <a href="#" class="disabled">管理画面</a>
                         <ul class="profile-manager">
-                            <li class="profile-manager__item"><a class="disabled" href="/auth/profile/<?php Helper::print_filtered($_SESSION['user']['id']) ?>">プロフィール</a></li>
-                            <li class="profile-manager__item"><a class="disabled" href="/auth/logout">ログアウト</a></li>
+                            <li class="profile-manager__item"><a class="disabled" href="/author/profile/<?php Helper::print_filtered($_SESSION['user']['id']) ?>">プロフィール</a></li>
+                            <li class="profile-manager__item"><a class="disabled" href="/authentication/logout">ログアウト</a></li>
                         </ul>
                     </li>
                 <?php else : ?>
                     <li class="release__item release__item--login">
-                        <a href="/auth/login" class="disabled">ログイン</a>
+                        <a href="/authentication/login" class="disabled">ログイン</a>
                     </li>
                 <?php endif ?>
             </ul>
