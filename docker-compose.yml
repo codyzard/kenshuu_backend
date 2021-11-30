@@ -8,6 +8,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: always
     ports:
       - 8000:80
     volumes:
@@ -23,9 +24,10 @@ services:
       MYSQL_ROOT_USER: ${DATABASE_USERNAME}
       MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
       MYSQL_DATABASE: ${DATABASE_NAME}
+    volumes:
+      - ./src/config:/docker-entrypoint-initdb.d #init database
     ports:
       - "9906:3306"
-
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:

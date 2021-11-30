@@ -12,7 +12,7 @@
             <h3 class="article__title"><?php print(htmlspecialchars($article['title'], ENT_QUOTES)) ?></h3>
             <div class="sub-info">
                 <time class="article__time"><img src="/public/assets/image/icon.png" class="clock-icon clock-icon--medium" alt="time-stamp" /><?php Helper::print_filtered($article['created_at']) ?></time>
-                <p class="article__author">筆者: <a href="/auth/profile/<?php Helper::print_filtered($article['author_id']) ?>"><?php Helper::print_filtered($article['fullname']) ?></a></p>
+                <p class="article__author">筆者: <a href="/author/profile/<?php Helper::print_filtered($article['author_id']) ?>"><?php Helper::print_filtered($article['fullname']) ?></a></p>
                 <p class="article__view">ページビュー: <?php Helper::print_filtered($article['page_view']) ?></p>
             </div>
         </div>
