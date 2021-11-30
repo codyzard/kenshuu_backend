@@ -5,6 +5,11 @@ class ArticleController extends BaseController
     private $articleModel;
     private $categoryModel;
 
+    /**
+     * __construct
+     * Load & init model
+     * @return void
+     */
     public function __construct()
     {
         $this->loadModel('ArticleModel');
@@ -13,6 +18,12 @@ class ArticleController extends BaseController
         $this->categoryModel = new CategoryModel;
     }
 
+    /**
+     * show article
+     *
+     * @param  mixed $id
+     * @return view
+     */
     public function show($id)
     {
         if (isset($id)) {
@@ -28,6 +39,11 @@ class ArticleController extends BaseController
         }
     }
 
+    /**
+     * show create article form
+     *
+     * @return void
+     */
     public function new()
     {
         $categories = $this->categoryModel->get_all();
@@ -37,6 +53,11 @@ class ArticleController extends BaseController
         ]);
     }
 
+    /**
+     * create article
+     *
+     * @return void
+     */
     public function create()
     {
         if ($this->is_authenticate()) {
@@ -69,6 +90,12 @@ class ArticleController extends BaseController
         }
     }
 
+    /**
+     * show edit article form
+     *
+     * @param  mixed $id
+     * @return view
+     */
     public function edit($id)
     {
         Helper::create_csrf_token();
@@ -83,6 +110,12 @@ class ArticleController extends BaseController
         }
     }
 
+    /**
+     * update article
+     *
+     * @param  mixed $id // $id: author_id
+     * @return void
+     */
     public function update($id)
     {
         if (isset($id)) {
@@ -106,6 +139,12 @@ class ArticleController extends BaseController
         }
     }
 
+    /**
+     * delete
+     *
+     * @param  mixed $id // $id: author_id
+     * @return void
+     */
     public function delete($id)
     {
         if (isset($id)) {
@@ -121,6 +160,11 @@ class ArticleController extends BaseController
         }
     }
 
+    /**
+     * Check if the user is logged in or not 
+     *
+     * @return bool
+     */
     public function is_authenticate()
     {
         if (isset($_SESSION['user'])) {
@@ -132,6 +176,12 @@ class ArticleController extends BaseController
         }
     }
 
+    /**
+     * check author's permission with article
+     *
+     * @param  mixed $article_id
+     * @return bool
+     */
     public function is_authorize($article_id)
     {
         if ($_SESSION['user']['id'] === $this->articleModel->get_author_id($article_id)) {

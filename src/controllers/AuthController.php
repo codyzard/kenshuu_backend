@@ -10,6 +10,11 @@ class AuthController extends BaseController
         $this->authorModel = new AuthorModel;
     }
 
+    /**
+     * Show login interface
+     *
+     * @return view
+     */
     public function login()
     {
         Helper::create_csrf_token();
@@ -19,6 +24,11 @@ class AuthController extends BaseController
         return $this->view('auth.login');
     }
 
+    /**
+     * Show register interface
+     *
+     * @return view
+     */
     public function register()
     {
         Helper::create_csrf_token();
@@ -28,6 +38,11 @@ class AuthController extends BaseController
         return $this->view('auth.register');
     }
 
+    /**
+     * Logout & destroy author's session
+     *
+     * @return view
+     */
     public function logout()
     {
         if (!empty(session_id()) && isset($_SESSION['user'])) {
@@ -37,6 +52,12 @@ class AuthController extends BaseController
         header('Location: /');
     }
 
+    /**
+     * Show author's profile
+     *
+     * @param  mixed $id
+     * @return view
+     */
     public function profile($id)
     {
         if (isset($id)) {
@@ -52,6 +73,11 @@ class AuthController extends BaseController
         }
     }
 
+    /**
+     * update author's profile avatar
+     *
+     * @return $src_update || false
+     */
     public function update_avatar()
     {
         if ($_SESSION['user']['id'] == $_POST['author_id']) {
@@ -65,6 +91,11 @@ class AuthController extends BaseController
         }
     }
 
+    /**
+     * Create new author with validate
+     *
+     * @return bool
+     */
     public function create()
     {
         $flag = true; // for validate
@@ -97,6 +128,11 @@ class AuthController extends BaseController
         }
     }
 
+    /**
+     * Create new session for author
+     *
+     * @return bool
+     */
     public function new_session()
     {
         $flag = true; // for validate
@@ -124,6 +160,12 @@ class AuthController extends BaseController
         }
     }
 
+    /**
+     * store author's data in session
+     *
+     * @param  mixed $new_session
+     * @return void
+     */
     public function store_user_data_in_session($new_session)
     {
         if (!$new_session) {

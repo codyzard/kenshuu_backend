@@ -5,6 +5,12 @@ class ArticleModel extends BaseModel
     //in future use class attribute for model. ex: article->title, article->content, etc...
     const TABLE = 'articles';
     const PUBLIC_IMAGE_ARTICLE_PATH = '/public/assets/image/articles/';
+        
+    /**
+     * get all articles with thumbnail & author
+     *
+     * @return $articles
+     */
     public function get_all_join_table()
     {
         $sql = "SELECT articles.id, title, thumbnail_id, articles.created_at, src, authors.fullname FROM articles
@@ -13,7 +19,13 @@ class ArticleModel extends BaseModel
         $result = $this->query($sql);
         return $result->fetchAll();
     }
-
+    
+    /**
+     * get author's id
+     *
+     * @param  mixed $id
+     * @return $author_id
+     */
     public function get_author_id($id)
     {
         $query_article = $this->prepare_query("SELECT author_id FROM articles WHERE id = :id");
@@ -22,7 +34,13 @@ class ArticleModel extends BaseModel
         $article = $query_article->fetch();
         return $article['author_id'];
     }
-
+    
+    /**
+     * find article with $id
+     *
+     * @param  mixed $id
+     * @return $article, $images
+     */
     public function find_by_id_join_table($id)
     {
         $sql_article = "SELECT title, content, page_view, articles.created_at, authors.fullname, author_id FROM articles 
@@ -47,7 +65,13 @@ class ArticleModel extends BaseModel
 
         return [$article, $images];
     }
-
+    
+    /**
+     * get article's title & content
+     *
+     * @param  mixed $id
+     * @return $article
+     */
     public function show_edit($id)
     {
         $sql = "SELECT title, content FROM articles WHERE id = :id";
@@ -57,7 +81,15 @@ class ArticleModel extends BaseModel
         $article = $query->fetch();
         return $article;
     }
-
+        
+    /**
+     * update article's title & content
+     *
+     * @param  mixed $id
+     * @param  string $title
+     * @param  string $content
+     * @return bool
+     */
     public function udpate_article($id, $title, $content)
     {
         $query = $this->prepare_query('UPDATE articles SET title = :title, content = :content where id = :id');
@@ -66,7 +98,18 @@ class ArticleModel extends BaseModel
         $query->bindValue(':id', $id, PDO::PARAM_INT);
         return $query->execute();
     }
-
+    
+    /**
+     *  create article
+     *
+     * @param  string $title
+     * @param  object $images
+     * @param  string $thumbnail
+     * @param  string $content
+     * @param  mixed $categories_id
+     * @param  mixed $author_id
+     * @return bool
+     */
     public function create_article($title, $images, $thumbnail, $content, $categories_id = [], $author_id)
     {
         try {
@@ -141,7 +184,13 @@ class ArticleModel extends BaseModel
             return false;
         }
     }
-
+    
+    /**
+     * delete article
+     *
+     * @param  mixed $id
+     * @return bool
+     */
     public function delete_article($id)
     {
         $this->connect->beginTransaction();

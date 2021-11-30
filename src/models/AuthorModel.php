@@ -5,6 +5,11 @@ class AuthorModel extends BaseModel
     const TABLE = 'authors';
     const PUBLIC_IMAGE_AUTHOR_PATH = '/public/assets/image/authors/';
 
+    /**
+     * get all authors
+     *
+     * @return $authors
+     */
     public function get_all()
     {
         $sql = 'SELECT * FROM ' . self::TABLE;
@@ -13,6 +18,15 @@ class AuthorModel extends BaseModel
         return $result->fetchAll();
     }
 
+    /**
+     * create new author
+     *
+     * @param  string $email
+     * @param  string $fullname
+     * @param  string $avatar
+     * @param  string $password
+     * @return $author || false
+     */
     public function create($email, $fullname, $avatar, $password)
     {
         try {
@@ -68,6 +82,13 @@ class AuthorModel extends BaseModel
         }
     }
 
+    /**
+     * find user in database with $email & $password
+     *
+     * @param  string $email
+     * @param  string $password
+     * @return $new_session
+     */
     public function find_user($email, $password)
     {
         $query_check_email_exist = $this->prepare_query("SELECT COUNT(*) FROM authors WHERE email = :email");
@@ -91,6 +112,12 @@ class AuthorModel extends BaseModel
         }
     }
 
+    /**
+     * get author info with $id 
+     *
+     * @param  mixed $id
+     * @return $author_info
+     */
     public function get_profile($id)
     {
         $query_profile = $this->prepare_query("SELECT authors.*, COUNT(articles.id) FROM authors LEFT JOIN articles ON articles.author_id = authors.id WHERE authors.id = :id LIMIT 1");
@@ -100,6 +127,13 @@ class AuthorModel extends BaseModel
         return $result_profile;
     }
 
+    /**
+     * update author's profile avatar
+     *
+     * @param  mixed $id
+     * @param  string $avatar
+     * @return $new_src_avatar
+     */
     public function update_avatar($id, $avatar)
     {
         try {
@@ -133,6 +167,13 @@ class AuthorModel extends BaseModel
         }
     }
 
+    /**
+     * store image in storage and save src in database
+     *
+     * @param  mixed $id
+     * @param  object $avatar
+     * @return array
+     */
     public function insert_avatar($id, $avatar)
     {
         if (file_exists($avatar['tmp_name'])) {

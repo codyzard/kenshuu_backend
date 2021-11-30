@@ -12,7 +12,12 @@ class HomeController extends BaseController
         $this->articleModel = new ArticleModel;
         $this->categoryModel = new CategoryModel;
     }
-
+    
+    /**
+     * index
+     *
+     * @return view
+     */
     public function index()
     {
         $articles = $this->articleModel->get_all_join_table();
