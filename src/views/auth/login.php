@@ -27,7 +27,7 @@
             <div class="form-group">
                 <input type="checkbox" name="save_session" /><label></i>次回から自動的にログイン</label>
             </div>
-            <a href="/auth/register"><input type="button" value="お申し込み" class="btn btn-res" /></a>
+            <a href="/authentication/register"><input type="button" value="お申し込み" class="btn btn-res" /></a>
         </form>
         <p class="description">
             アカウントをお持ちでない方で、PR
