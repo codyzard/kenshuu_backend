@@ -3,6 +3,11 @@
 class Helper
 {
 
+    /**
+     * Create csrf token
+     *
+     * @return void
+     */
     public static function create_csrf_token()
     {
         $token = bin2hex(random_bytes(32));
@@ -10,6 +15,11 @@ class Helper
         $_SESSION['csrf_token_time'] = time();
     }
 
+    /**
+     * Validate csrf token
+     *
+     * @return bool
+     */
     public static function csrf_token_validate()
     {
         if ($_POST['csrf_token'] === $_SESSION['csrf_token']) {
@@ -27,7 +37,12 @@ class Helper
         }
     }
 
-    // avoid DRY, use function flash message 
+    /**
+     * Show all messages
+     *
+     * @param  array $messages
+     * @return $all_msg
+     */
     public static function flash_message($messages = [])
     {
         $all_msg = "";
@@ -38,11 +53,26 @@ class Helper
         return $all_msg;
     }
 
+    /**
+     * Print string after filter special characters
+     *
+     * @param  string $string
+     * @return $string
+     */
     public static function print_filtered($string)
     {
         print(htmlspecialchars($string, ENT_QUOTES));
     }
 
+    /**
+     * Store image in storage
+     *
+     * @param  mixed $file
+     * @param  int $error
+     * @param  int $size
+     * @param  string $location
+     * @return $filename
+     */
     public static function store_image($file, $error, $size, $location)
     {
         try {
@@ -108,6 +138,13 @@ class Helper
         }
     }
 
+    /**
+     * Remove images from storage
+     *
+     * @param  array $filesName
+     * @param  string $pathImage
+     * @return bool
+     */
     public static function remove_image_from_storage($filesName = [], $pathImage)
     {
         try {
@@ -124,7 +161,7 @@ class Helper
     }
 
     /**
-     * store author's data in session
+     * Store author's data in session
      *
      * @param  mixed $new_session
      * @return void
