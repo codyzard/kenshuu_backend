@@ -18,6 +18,10 @@
                 <i class="far fa-envelope fa-lg"></i>
             </div>
             <div class="form-group">
+                <input type="text" name="username" id="username" class="form-control" placeholder="ユーザーネーム" required />
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="form-group">
                 <input type="text" name="name" id="name" class="form-control" placeholder="名前" required />
                 <i class="fas fa-signature"></i>
             </div>

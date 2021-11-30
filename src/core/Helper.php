@@ -139,6 +139,7 @@ class Helper
             }
             $_SESSION['user']['id'] = $new_session['id'];
             $_SESSION['user']['email'] = $new_session['email'];
+            $_SESSION['user']['username'] = $new_session['username'];
             $_SESSION['user']['fullname'] = $new_session['fullname'];
             header('Location: /');
         }

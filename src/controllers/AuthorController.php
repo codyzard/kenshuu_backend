@@ -56,17 +56,22 @@ class AuthorController extends BaseController
     public function create()
     {
         $flag = true; // for validate
-        if (isset($_POST['email']) && isset($_POST['name']) && isset($_POST['password'])) {
+        if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['name']) && isset($_POST['password'])) {
             $email = trim($_POST['email']); // check regex server side
+            $username = trim($_POST['username']);
             $fullname = trim($_POST['name']);
             $password = $_POST['password'];
             $avatar = $_FILES['profile-avatar'];
-            if (empty($email) || empty($fullname) || empty($password)) {
-                $_SESSION['errors']['blank'] = "E-メールやフルネームやパスワードを空白にさせないでください！";
+            if (empty($email) || empty($username) || empty($fullname) || empty($password)) {
+                $_SESSION['errors']['blank'] = "E-メールやユーザーネームやフルネームやパスワードを空白にさせないでください！";
                 $flag = false;
             }
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $_SESSION['errors']['email'] = 'Eメールは妥当ではありませんでした！';
+                $flag = false;
+            }
+            if (strlen($username) < 6) {
+                $_SESSION['errors']['username_length'] = 'ユーザーネームは最低6文字、最大100文字としてください！';
                 $flag = false;
             }
             if (strlen($password) < 6) {
@@ -74,7 +79,7 @@ class AuthorController extends BaseController
                 $flag = false;
             }
             if ($flag) {
-                $new_session = $this->authorModel->create($email, $fullname, $avatar, $password);
+                $new_session = $this->authorModel->create($email, $username, $fullname, $avatar, $password);
                 Helper::store_user_data_in_session($new_session);
             } else {
                 header('Location: ' . $_SERVER['HTTP_REFERER']);

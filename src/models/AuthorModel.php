@@ -27,7 +27,7 @@ class AuthorModel extends BaseModel
      * @param  string $password
      * @return $author || false
      */
-    public function create($email, $fullname, $avatar, $password)
+    public function create($email, $username, $fullname, $avatar, $password)
     {
         try {
             $this->connect->beginTransaction();
@@ -42,12 +42,24 @@ class AuthorModel extends BaseModel
                 $this->connect->rollBack();
                 return false;
             }
+            
+            // check username existed in database ? 
+            $query_author_from_username = $this->prepare_query("SELECT COUNT(*) FROM authors WHERE username = :username");
+            $query_author_from_username->bindValue(':username', $username);
+            $query_author_from_username->execute();
+            $result_count = $query_author_from_username->fetch();
+            if ($result_count[0] > 0) {
+                $_SESSION['errors']['username'] = 'このユーザーネームは存在しました！';
+                $this->connect->rollBack();
+                return false;
+            }
 
             //Create author
-            $sql_author = "INSERT INTO authors (email, fullname, password, created_at, updated_at) 
-                            VALUES (:email, :fullname, :password, now(), now())";
+            $sql_author = "INSERT INTO authors (email, username, fullname, password, created_at, updated_at) 
+                            VALUES (:email, :username, :fullname, :password, now(), now())";
             $query_author = $this->prepare_query($sql_author);
             $query_author->bindValue(':email', $email);
+            $query_author->bindValue(':username', $username);
             $query_author->bindValue(':fullname', $fullname);
             $query_author->bindValue(':password', md5($password));
             $result_author = $query_author->execute();
@@ -89,15 +101,24 @@ class AuthorModel extends BaseModel
      * @param  string $password
      * @return $new_session
      */
-    public function find_user($email, $password)
+    public function find_user($email_or_username, $password)
     {
-        $query_check_email_exist = $this->prepare_query("SELECT COUNT(*) FROM authors WHERE email = :email");
-        $query_check_email_exist->bindValue(':email', $email);
-        $query_check_email_exist->execute();
-        $result_email = $query_check_email_exist->fetch();
-        if ($result_email[0] > 0) {
-            $query_new_session = $this->prepare_query("SELECT * FROM authors WHERE email = :email AND password = :password");
-            $query_new_session->bindValue(":email", $email);
+        if (filter_var($email_or_username, FILTER_VALIDATE_EMAIL)) {
+            $query_check_email_exist = $this->prepare_query("SELECT COUNT(*) FROM authors WHERE email = :email");
+            $query_check_email_exist->bindValue(':email', $email_or_username);
+            $query_check_email_exist->execute();
+            $result_exist = $query_check_email_exist->fetch();
+        } else {
+            $query_check_username_exist = $this->prepare_query("SELECT COUNT(*) FROM authors WHERE username = :username");
+            $query_check_username_exist->bindValue(':username', $email_or_username);
+            $query_check_username_exist->execute();
+            $result_exist = $query_check_username_exist->fetch();
+        }
+
+        if ($result_exist[0] > 0) {
+            $query_new_session = $this->prepare_query("SELECT * FROM authors WHERE (email = :email OR username = :username) AND password = :password");
+            $query_new_session->bindValue(":email", $email_or_username);
+            $query_new_session->bindValue(":username", $email_or_username);
             $query_new_session->bindValue(":password", md5($password));
             $query_new_session->execute();
             $result_new_session = $query_new_session->fetchAll();
@@ -107,7 +128,7 @@ class AuthorModel extends BaseModel
             $_SESSION['errors']['password'] = 'パスワードは間違いました！';
             return false;
         } else {
-            $_SESSION['errors']['email'] = 'このEメールは存在しない！';
+            $_SESSION['errors']['email'] = 'このメールアドレス又はユーザーネームは存在しない！';
             return false;
         }
     }

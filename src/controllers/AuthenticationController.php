@@ -60,15 +60,15 @@ class AuthenticationController extends BaseController
     public function new_session()
     {
         $flag = true; // for validate
-        if (isset($_POST['email']) && isset($_POST['password'])) {
-            $email = trim($_POST['email']);
+        if (isset($_POST['email_or_username']) && isset($_POST['password'])) {
+            $email_or_username = trim($_POST['email_or_username']);
             $password = $_POST['password'];
-            if (empty($email) || empty($password)) {
+            if (empty($email_or_username) || empty($password)) {
                 $_SESSION['errors']['blank'] = "E-メールやパスワードを空白にさせないでください！";
                 $flag = false;
             }
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $_SESSION['errors']['email'] = 'Eメールは妥当ではありませんでした！';
+            if (strlen($email_or_username) < 6) {
+                $_SESSION['errors']['email_or_username'] = 'メールアドレス又はユーザーネームは最低6文字、最大100文字としてください！';
                 $flag = false;
             }
             if (strlen($password) < 6) {
@@ -76,12 +76,11 @@ class AuthenticationController extends BaseController
                 $flag = false;
             }
             if ($flag) {
-                $new_session = $this->authorModel->find_user($email, $password); // return array or false
+                $new_session = $this->authorModel->find_user($email_or_username, $password); // return array or false
                 Helper::store_user_data_in_session($new_session);
             } else {
                 header('Location: ' . $_SERVER['HTTP_REFERER']);
             }
         }
     }
-
 }

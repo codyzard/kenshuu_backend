@@ -14,7 +14,7 @@
                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token'] ?>">
             </div>
             <div class="form-group">
-                <input type="email" name="email" id="email" class="form-control" placeholder="メールアドレス" required />
+                <input type="text" name="email_or_username" id="email_or_username" class="form-control" placeholder="メールアドレス又はユーザーネーム" required />
                 <i class="far fa-envelope fa-lg"></i>
             </div>
             <div class="form-group">
