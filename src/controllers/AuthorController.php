@@ -2,6 +2,7 @@
 
 class AuthorController extends BaseController
 {
+    private $authorModel;
 
     public function __construct()
     {
@@ -10,7 +11,7 @@ class AuthorController extends BaseController
     }
 
     /**
-     * Show author's profile
+     * Showing author's profile
      *
      * @param  mixed $id
      * @return view
@@ -19,11 +20,11 @@ class AuthorController extends BaseController
     {
         if (isset($id)) {
             $profile = $this->authorModel->get_profile($id);
-            if (!$profile) {
+            if (!$profile['fullname']) {
                 $_SESSION['errors']['profile'] = "プロフィールが取得できません！";
                 header('Location: /');
             } else {
-                return $this->view("auth.profile", [
+                return $this->view("authors.profile", [
                     "profile" => $profile,
                 ]);
             }
@@ -31,13 +32,13 @@ class AuthorController extends BaseController
     }
 
     /**
-     * update author's profile avatar
+     * Updating author's profile avatar
      *
      * @return $src_update || false
      */
     public function update_avatar()
     {
-        if ($_SESSION['user']['id'] == $_POST['author_id']) {
+        if (Helper::is_logged($_POST['author_id'])) {
             $author_id = $_POST['author_id'];
             $avatar = $_FILES;
             $src_updated =  $this->authorModel->update_avatar($author_id, $avatar['file']);
@@ -45,6 +46,74 @@ class AuthorController extends BaseController
                 echo $src_updated; // return new_avatar_src
             }
             echo false;
+        }
+    }
+
+    /**
+     * Showing update author's profile form
+     *
+     * @return void
+     */
+    public function update_profile($id)
+    {
+        if (Helper::is_logged($id)) {
+            Helper::create_csrf_token();
+            $author = $this->authorModel->get_profile_for_update($id);
+            $author['id'] = $id;
+            return $this->view("authors.change_profile", [
+                'author' => $author,
+            ]);
+        } else {
+            $_SESSION['errors']['authentication-authorize'] = 'この行動が禁止です！';
+            Header('Location: /');
+        }
+    }
+
+    /**
+     * Storing new author's profile after updating
+     *
+     * @param  int $id
+     * @return void
+     */
+    public function store_update_profile($id)
+    {
+        if (Helper::is_logged($id)) {
+            if (isset($_SESSION['user']) && isset($_POST['fullname'])) {
+                $flag = true;
+                $email = $_SESSION['user']['email'];
+                $fullname = trim($_POST['fullname']);
+                $address = trim($_POST['address']);
+                $birthday = $_POST['birthday'];
+                $phone = trim($_POST['phone']);
+                $filtered_phone_number = filter_var($phone, FILTER_SANITIZE_NUMBER_INT);
+                $phone_to_check = str_replace("-", "", $filtered_phone_number);
+                if (empty($fullname) || empty($address) || empty($phone)) {
+                    $_SESSION['errors']['fullname'] = 'フルネーム住所や電話番号などを空白にさせないでください！';
+                    $flag = false;
+                }
+                if (strlen($phone_to_check) < 10 || strlen($phone_to_check) > 12) {
+                    $_SESSION['errors']['phone_length'] = '電話番号は最低10文字、最大12文字としてください！';
+                    $flag = false;
+                }
+                //check flag
+                if ($flag) {
+                    $is_success = $this->authorModel->update_profile($email, $fullname, $address, $birthday, $phone_to_check);
+                    if (!$is_success) {
+                        header('Location: ' . $_SERVER['HTTP_REFERER']);
+                    } else {
+                        $_SESSION['messages']['profile']  = 'プロフィールを変更するのは成功でした！';
+                        header('Location: /author/profile/' . $id);
+                    }
+                } else {
+                    header('Location: ' . $_SERVER['HTTP_REFERER']);
+                }
+            } else {
+                $_SESSION['errors']['system'] = '500 Internal Error';
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+            }
+        } else {
+            $_SESSION['errors']['authentication-authorize'] = 'この行動が禁止です！';
+            Header('Location: /');
         }
     }
 

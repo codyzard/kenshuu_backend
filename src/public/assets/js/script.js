@@ -64,7 +64,7 @@ $(document).ready(function () {
       processData: false,
       data: form_data,
       success: function (data) {
-        alert("アバターの変更が成功でした！")
+        alert("アバターの変更が成功でした！");
         $(".profile__avatar img").attr(
           "src",
           "/public/assets/image/authors/" + data
@@ -74,5 +74,13 @@ $(document).ready(function () {
         console.log(err);
       },
     });
+  });
+
+  //update_password check password matched
+  $("#submit-update-password").click((e) => {
+    if ($("#new_password").val() !== $("#cnew_password").val()) {
+      alert("新たなパスワードと新たなパスワードの確認は一致しません！");
+      e.preventDefault();
+    }
   });
 });

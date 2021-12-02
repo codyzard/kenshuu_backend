@@ -11,7 +11,7 @@ class AuthenticationController extends BaseController
     }
 
     /**
-     * Show login interface
+     * Showing login interface
      *
      * @return view
      */
@@ -21,11 +21,11 @@ class AuthenticationController extends BaseController
         if (isset($_SESSION['user'])) {
             header('Location: /');
         }
-        return $this->view('auth.login');
+        return $this->view('authentication.login');
     }
 
     /**
-     * Show register interface
+     * Showing register interface
      *
      * @return view
      */
@@ -35,7 +35,7 @@ class AuthenticationController extends BaseController
         if (isset($_SESSION['user'])) {
             header('Location: /');
         }
-        return $this->view('auth.register');
+        return $this->view('authentication.register');
     }
 
     /**
@@ -53,7 +53,7 @@ class AuthenticationController extends BaseController
     }
 
     /**
-     * Create new session for author
+     * Creating new session for author
      *
      * @return bool
      */
@@ -81,6 +81,66 @@ class AuthenticationController extends BaseController
             } else {
                 header('Location: ' . $_SERVER['HTTP_REFERER']);
             }
+        }
+    }
+
+    /**
+     * Showing change password form
+     *
+     * @param  int $id
+     * @return view
+     */
+    public function change_password($id)
+    {
+        if (Helper::is_logged($id)) {
+            Helper::create_csrf_token();
+            return $this->view("authentication.change_password", [
+                'author_id' => $id,
+            ]);
+        } else {
+            $_SESSION['errors']['authentication-authorize'] = 'この行動が禁止です！';
+            Header('Location: /');
+        }
+    }
+
+    /**
+     * Updating new author's password
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function store_change_password($id)
+    {
+        if (Helper::is_logged($id)) {
+            if (isset($_SESSION['user']) && isset($_POST['old_password']) && isset($_POST['new_password'])) {
+                $flag = true;
+                $email = $_SESSION['user']['email'];
+                $old_password = md5($_POST['old_password']);
+                $new_password = md5($_POST['new_password']);
+                // check password length must be greater than 6 character
+                if (strlen($old_password) < 6 || strlen($new_password) < 6) {
+                    $_SESSION['errors']['password'] = 'パスワードは最低6文字、最大60文字としてください！';
+                    $flag = false;
+                }
+                //check flag
+                if ($flag) {
+                    $is_success = $this->authorModel->update_password($email, $old_password, $new_password);
+                    if (!$is_success) {
+                        header('Location: ' . $_SERVER['HTTP_REFERER']);
+                    } else {
+                        $_SESSION['messages']['password']  = 'パスワードを変更するのは成功でした！';
+                        header('Location: /author/profile/' . $id);
+                    }
+                } else {
+                    header('Location: ' . $_SERVER['HTTP_REFERER']);
+                }
+            } else {
+                $_SESSION['errors']['system'] = '500 Internal Error';
+                header('Location: ' . $_SERVER['HTTP_REFERER']);
+            }
+        } else {
+            $_SESSION['errors']['authentication-authorize'] = 'この行動が禁止です！';
+            Header('Location: /');
         }
     }
 }

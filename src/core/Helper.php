@@ -181,4 +181,18 @@ class Helper
             header('Location: /');
         }
     }
+
+    /**
+     * check user logged && that user give action is authorized
+     *
+     * @param  int $user_id
+     * @return bool
+     */
+    public static function is_logged($user_id)
+    {
+        if ($_SESSION['user'] && $_SESSION['user']['id'] == $user_id) {
+            return true;
+        }
+        return false;
+    }
 }

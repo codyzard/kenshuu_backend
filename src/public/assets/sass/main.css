@@ -1136,7 +1136,8 @@ button {
 }
 
 .login,
-.register {
+.register,
+.change-password, .change-profile {
   margin: 100px auto;
   width: 380px;
   display: -webkit-box;
@@ -1158,12 +1159,14 @@ button {
 }
 
 .login h3,
-.register h3 {
+.register h3,
+.change-password h3, .change-profile h3 {
   font-size: 1.5rem;
 }
 
 .login form,
-.register form {
+.register form,
+.change-password form, .change-profile form {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1174,7 +1177,8 @@ button {
 }
 
 .login form .form-group,
-.register form .form-group {
+.register form .form-group,
+.change-password form .form-group, .change-profile form .form-group {
   color: #a2a2a2;
   position: relative;
   margin: 0 5px;
@@ -1184,20 +1188,23 @@ button {
 }
 
 .login form .form-group input[type="checkbox"],
-.register form .form-group input[type="checkbox"] {
+.register form .form-group input[type="checkbox"],
+.change-password form .form-group input[type="checkbox"], .change-profile form .form-group input[type="checkbox"] {
   -webkit-transform: scale(1.5);
           transform: scale(1.5);
 }
 
 .login form .form-group label,
-.register form .form-group label {
+.register form .form-group label,
+.change-password form .form-group label, .change-profile form .form-group label {
   margin: auto 10px;
   font-size: 13px;
   width: 100%;
 }
 
 .login form .form-group .form-control,
-.register form .form-group .form-control {
+.register form .form-group .form-control,
+.change-password form .form-group .form-control, .change-profile form .form-group .form-control {
   width: 100%;
   height: 40px;
   padding: 10px 45px;
@@ -1206,14 +1213,16 @@ button {
 }
 
 .login form .form-group i,
-.register form .form-group i {
+.register form .form-group i,
+.change-password form .form-group i, .change-profile form .form-group i {
   position: absolute;
   top: 25px;
   left: 18px;
 }
 
 .login form .form-group span,
-.register form .form-group span {
+.register form .form-group span,
+.change-password form .form-group span, .change-profile form .form-group span {
   position: absolute;
   top: 20px;
   right: 18px;
@@ -1223,45 +1232,50 @@ button {
 }
 
 .login form input,
-.register form input {
+.register form input,
+.change-password form input, .change-profile form input {
   margin: 10px 0;
 }
 
 .login form input[type="button"], .login form input[type="submit"],
 .register form input[type="button"],
-.register form input[type="submit"] {
+.register form input[type="submit"],
+.change-password form input[type="button"],
+.change-password form input[type="submit"], .change-profile form input[type="button"], .change-profile form input[type="submit"] {
   cursor: pointer;
 }
 
-.login form input.btn-submit,
-.register form input.btn-submit {
+.login form input.btn,
+.register form input.btn,
+.change-password form input.btn, .change-profile form input.btn {
   border: none;
   background-color: #f26600;
   color: #ffffff;
   font-size: 1.5rem;
   border-radius: 5px;
   padding: 30px 110px;
+  width: 100%;
 }
 
 .login form input.btn-res,
-.register form input.btn-res {
-  border: none;
+.register form input.btn-res,
+.change-password form input.btn-res, .change-profile form input.btn-res {
   background-color: #ffffff;
   color: #f26600;
-  font-size: 1.5rem;
-  border-radius: 5px;
   border: 1px solid #f26600;
   padding: 10px 110px;
 }
 
 .login form input.btn-res:hover,
-.register form input.btn-res:hover {
+.register form input.btn-res:hover,
+.change-password form input.btn-res:hover, .change-profile form input.btn-res:hover {
   color: #ffffff;
   background-color: #f26600;
 }
 
 .login form a,
-.register form a {
+.register form a,
+.change-password form a, .change-profile form a {
   font-size: 14px;
   display: inline-block;
   color: #3081c9;
@@ -1269,7 +1283,8 @@ button {
 }
 
 .login .description,
-.register .description {
+.register .description,
+.change-password .description, .change-profile .description {
   color: #a2a2a2;
   font-size: 13px;
 }
@@ -1384,6 +1399,17 @@ button {
 
 .profile__address span, .profile__birthday span, .profile__phone span {
   font-size: inherit;
+}
+
+.profile__control {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 10px;
+}
+
+.profile__control a {
+  width: 150px;
 }
 
 /* end Auth */

@@ -65,4 +65,11 @@
       font-size: inherit;
     }
   }
+  &__control{
+    display: flex;
+    gap: 10px;
+    a{
+      width: 150px;
+    }
+  }
 }

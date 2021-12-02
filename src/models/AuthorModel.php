@@ -42,7 +42,7 @@ class AuthorModel extends BaseModel
                 $this->connect->rollBack();
                 return false;
             }
-            
+
             // check username existed in database ? 
             $query_author_from_username = $this->prepare_query("SELECT COUNT(*) FROM authors WHERE username = :username");
             $query_author_from_username->bindValue(':username', $username);
@@ -212,5 +212,70 @@ class AuthorModel extends BaseModel
             return [$image_name, $paths, $result_avatar]; // 0: include image_name, 1: array image_name, 2: result_sql(true or false)
         }
         return false;
+    }
+
+    /**
+     * Updating author's password
+     *
+     * @param  string $email
+     * @param  string $old_password
+     * @param  string $new_password
+     * @return bool
+     */
+    public function update_password($email, $old_password, $new_password)
+    {
+        // check password is true
+        $query_get_author = $this->prepare_query('SELECT * FROM authors WHERE email = :email AND password = :old_password');
+        $query_get_author->bindValue(':email', $email);
+        $query_get_author->bindValue(':old_password', $old_password);
+        $query_get_author->execute();
+        $result_get_author = $query_get_author->fetch();
+        if (!$result_get_author) {
+            $_SESSION['errors']['password'] =  '古いパスワードが間違いました！';
+            return false;
+        }
+        // updating new password
+        $query_update_password = $this->prepare_query('UPDATE authors SET password = :new_password WHERE email = :email');
+        $query_update_password->bindValue(':new_password', $new_password);
+        $query_update_password->bindValue(':email', $email);
+        $result_update_password = $query_update_password->execute();
+        return $result_update_password;
+    }
+    
+    /**
+     * Getting profile for showing profile update's form
+     *
+     * @param  int $id
+     * @return object
+     */
+    public function get_profile_for_update($id)
+    {
+        $query_get_profile = $this->prepare_query("SELECT email, fullname, address, birthday, phone FROM authors WHERE id = :id");
+        $query_get_profile->bindValue(':id', $id);
+        $query_get_profile->execute();
+        $result_get_profile = $query_get_profile->fetch();
+        return $result_get_profile;
+    }
+    
+    /**
+     * Updating profile
+     *
+     * @param  string $email
+     * @param  string $fullname
+     * @param  string $address
+     * @param  mixed $birthday
+     * @param  string $phone
+     * @return bool
+     */
+    public function update_profile($email, $fullname, $address, $birthday, $phone)
+    {
+        $query_update_profile = $this->prepare_query("UPDATE authors SET fullname = :fullname, address = :address, birthday = :birthday, phone = :phone WHERE email = :email");
+        $query_update_profile->bindValue(':email', $email);
+        $query_update_profile->bindValue(':fullname', $fullname);
+        $query_update_profile->bindValue(':address', $address);
+        $query_update_profile->bindValue(':birthday', $birthday);
+        $query_update_profile->bindValue(':phone', $phone);
+        $result_update_profile = $query_update_profile->execute();
+        return $result_update_profile;
     }
 }

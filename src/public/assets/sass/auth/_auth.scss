@@ -4,7 +4,8 @@
 }
 
 .login,
-.register {
+.register,
+.change-password, .change-profile {
   margin: 100px auto;
   width: 380px;
   @include flex_vertical_center;
@@ -61,20 +62,18 @@
       &[type="submit"] {
         cursor: pointer;
       }
-      &.btn-submit {
+      &.btn {
         border: none;
         background-color: $auth_btn_color;
         color: $white;
         font-size: 1.5rem;
         border-radius: 5px;
         padding: 30px 110px;
+        width: 100%;
       }
       &.btn-res {
-        border: none;
         background-color: $white;
         color: $auth_btn_color;
-        font-size: 1.5rem;
-        border-radius: 5px;
         border: 1px solid $auth_btn_color;
         padding: 10px 110px;
         &:hover {
