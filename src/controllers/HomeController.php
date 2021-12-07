@@ -1,5 +1,5 @@
 <?php
-require './config/db.php';
+
 class HomeController extends BaseController
 {
 
@@ -12,7 +12,7 @@ class HomeController extends BaseController
         $this->articleModel = new ArticleModel;
         $this->categoryModel = new CategoryModel;
     }
-    
+
     /**
      * index
      *
