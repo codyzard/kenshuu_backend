@@ -115,7 +115,7 @@ class Helper
             }
 
             // check folder existed before storage
-            if (!file_exists($location)) {
+            if (!file_exists($location) || !is_dir($location)) {
                 mkdir($location, 0777, true); // create folder with path is $location
             }
 
