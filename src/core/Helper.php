@@ -113,6 +113,12 @@ class Helper
             )) {
                 throw new RuntimeException('ファイル形式が不正です');
             }
+
+            // check folder existed before storage
+            if (!file_exists($location)) {
+                mkdir($location, 0777, true); // create folder with path is $location
+            }
+
             // ファイルデータからSHA-1ハッシュを取ってファイル名を決定し，保存する
             if (!move_uploaded_file(
                 $file,
