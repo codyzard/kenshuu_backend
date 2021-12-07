@@ -1,5 +1,5 @@
 <?php
-require './config/db.php';
+
 class HomeController extends BaseController
 {
 
@@ -13,6 +13,11 @@ class HomeController extends BaseController
         $this->categoryModel = new CategoryModel;
     }
 
+    /**
+     * index
+     *
+     * @return view
+     */
     public function index()
     {
         $articles = $this->articleModel->get_all_join_table();

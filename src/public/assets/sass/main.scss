@@ -7,7 +7,6 @@
 
 /* end Init */
 
-
 /* Layout */
 
 @import "layout/header";
@@ -18,7 +17,6 @@
 
 /* end Layout */
 
-
 /* Articles */
 
 @import "article/article_new";
@@ -26,5 +24,8 @@
 
 /* end Articles */
 
+/* Auth */
 
-
+@import "auth/auth";
+@import "auth/profile";
+/* end Auth */

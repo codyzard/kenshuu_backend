@@ -3,6 +3,11 @@
 class Helper
 {
 
+    /**
+     * Create csrf token
+     *
+     * @return void
+     */
     public static function create_csrf_token()
     {
         $token = bin2hex(random_bytes(32));
@@ -10,6 +15,11 @@ class Helper
         $_SESSION['csrf_token_time'] = time();
     }
 
+    /**
+     * Validate csrf token
+     *
+     * @return bool
+     */
     public static function csrf_token_validate()
     {
         if ($_POST['csrf_token'] === $_SESSION['csrf_token']) {
@@ -27,7 +37,12 @@ class Helper
         }
     }
 
-    // avoid DRY, use function flash message 
+    /**
+     * Show all messages
+     *
+     * @param  array $messages
+     * @return $all_msg
+     */
     public static function flash_message($messages = [])
     {
         $all_msg = "";
@@ -38,11 +53,26 @@ class Helper
         return $all_msg;
     }
 
+    /**
+     * Print string after filter special characters
+     *
+     * @param  string $string
+     * @return $string
+     */
     public static function print_filtered($string)
     {
         print(htmlspecialchars($string, ENT_QUOTES));
     }
 
+    /**
+     * Store image in storage
+     *
+     * @param  mixed $file
+     * @param  int $error
+     * @param  int $size
+     * @param  string $location
+     * @return $filename
+     */
     public static function store_image($file, $error, $size, $location)
     {
         try {
@@ -83,6 +113,12 @@ class Helper
             )) {
                 throw new RuntimeException('ファイル形式が不正です');
             }
+
+            // check folder existed before storage
+            if (!file_exists($location) || !is_dir($location)) {
+                mkdir($location, 0777, true); // create folder with path is $location
+            }
+
             // ファイルデータからSHA-1ハッシュを取ってファイル名を決定し，保存する
             if (!move_uploaded_file(
                 $file,
@@ -106,5 +142,63 @@ class Helper
 
             echo $e->getMessage();
         }
+    }
+
+    /**
+     * Remove images from storage
+     *
+     * @param  array $filesName
+     * @param  string $pathImage
+     * @return bool
+     */
+    public static function remove_image_from_storage($filesName = [], $pathImage)
+    {
+        try {
+            foreach ($filesName as $fn) {
+                if (file_exists($_SERVER['DOCUMENT_ROOT'] . $pathImage . $fn)) { //check file exist before remove
+                    unlink($_SERVER['DOCUMENT_ROOT'] . $pathImage . $fn);
+                }
+            }
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getMessage();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Store author's data in session
+     *
+     * @param  mixed $new_session
+     * @return void
+     */
+    public static function store_user_data_in_session($new_session)
+    {
+        if (!$new_session) {
+            header('Location: ' . $_SERVER['HTTP_REFERER']);
+        } else {
+            if (empty(session_id())) {
+                session_start();
+            }
+            $_SESSION['user']['id'] = $new_session['id'];
+            $_SESSION['user']['email'] = $new_session['email'];
+            $_SESSION['user']['username'] = $new_session['username'];
+            $_SESSION['user']['fullname'] = $new_session['fullname'];
+            header('Location: /');
+        }
+    }
+
+    /**
+     * check user logged && that user give action is authorized
+     *
+     * @param  int $user_id
+     * @return bool
+     */
+    public static function is_logged($user_id)
+    {
+        if ($_SESSION['user'] && $_SESSION['user']['id'] == $user_id) {
+            return true;
+        }
+        return false;
     }
 }

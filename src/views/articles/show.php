@@ -11,8 +11,8 @@
         <div class="article-header">
             <h3 class="article__title"><?php print(htmlspecialchars($article['title'], ENT_QUOTES)) ?></h3>
             <div class="sub-info">
-                <time class="article__time"><?php Helper::print_filtered($article['created_at']) ?></time>
-                <p class="article__author">筆者: <?php Helper::print_filtered($article['fullname']) ?></p>
+                <time class="article__time"><img src="/public/assets/image/icon.png" class="clock-icon clock-icon--medium" alt="time-stamp" /><?php Helper::print_filtered($article['created_at']) ?></time>
+                <p class="article__author">筆者: <a href="/author/profile/<?php Helper::print_filtered($article['author_id']) ?>"><?php Helper::print_filtered($article['fullname']) ?></a></p>
                 <p class="article__view">ページビュー: <?php Helper::print_filtered($article['page_view']) ?></p>
             </div>
         </div>
@@ -26,7 +26,9 @@
         </div>
     </div>
     <div class="control">
-        <a class="btn btn--warning btn--radius" href="/article/edit/<?php Helper::print_filtered($id) ?>">変更</a>
-        <a class="btn btn--danger btn--radius" onclick="return confirm('Are you sure?')" href="/article/delete/<?php Helper::print_filtered($id) ?>">削除</a>
+        <?php if ($_SESSION['user']['id'] === $article['author_id']) : ?>
+            <a class="btn btn--warning btn--radius" href="/article/edit/<?php Helper::print_filtered($id) ?>">変更</a>
+            <a class="btn btn--danger btn--radius" onclick="return confirm('Are you sure?')" href="/article/delete/<?php Helper::print_filtered($id) ?>">削除</a>
+        <?php endif ?>
     </div>
 </div>

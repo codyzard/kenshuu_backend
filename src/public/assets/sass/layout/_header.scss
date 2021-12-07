@@ -39,18 +39,52 @@ header {
   border-radius: 5px;
   padding: 5px 15px;
   margin-right: 10px;
-  &__item a {
-    font-size: 1.3rem;
-    margin: 0 3px;
-    color: white;
-    &:not(.disabled)::after {
-      content: "|";
-      display: inline-block;
-      font-size: 1.4rem;
-      padding: 0 8px;
+  &__item {
+    a {
+      font-size: 1.3rem;
+      margin: 0 3px;
+      color: white;
+      &:not(.disabled)::after {
+        content: "|";
+        display: inline-block;
+        font-size: 1.4rem;
+        padding: 0 8px;
+      }
+      &:hover {
+        text-decoration: underline;
+      }
     }
-    &:hover {
-      text-decoration: underline;
+    &--logged {
+      position: relative;
+      &:hover > .profile-manager {
+        opacity: 1;
+        z-index: 1;
+      }
+    }
+  }
+}
+
+.profile-manager {
+  position: absolute;
+  top: 24px;
+  right: -15px;
+  width: 85px;
+  height: 45px;
+  padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background-color: $header_release;
+  border-radius: 5px;
+  border-top: 1px solid white;
+  color: white;
+  opacity: 0;
+  z-index: -1;
+  transition: all 0.3s;
+  &__item {
+    a {
+      font-size: 1.1rem;
     }
   }
 }
@@ -70,9 +104,6 @@ header {
     width: 30px;
     cursor: pointer;
     border-radius: 0 4px 4px 0;
-    img{
-
-    }
   }
 }
 

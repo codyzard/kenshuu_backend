@@ -1,13 +1,18 @@
-@import './variable';
+@import "./variable";
 /* Common */
 
-button{
+button {
   cursor: pointer;
 }
 
-.clock-icon--size {
+.clock-icon--small {
   width: 10px;
   height: 10px;
+}
+
+.clock-icon--medium {
+  width: 15px;
+  height: 15px;
 }
 
 .input--radius {
@@ -46,7 +51,7 @@ button{
       color: $info_color;
     }
   }
-  
+
   &--warning {
     background-color: $warning_color;
     border-color: $warning_color;
@@ -66,7 +71,7 @@ button{
     }
   }
 
-  &--danger{
+  &--danger {
     background-color: $danger2_color;
     border-color: $danger2_color;
     font-size: 1.4rem;
@@ -82,24 +87,24 @@ button{
   }
 }
 
-.flash{
-  width: 29%;
+.flash {
   padding: 15px 20px;
   border-radius: 5px;
   margin: 0 auto;
-  text-align: center;
-  .message{
+  margin-bottom: 10px;
+  .message {
     font-size: 1.2rem;
+    list-style: disc outside none;
+    display: list-item;
   }
 
-  &--success{
+  &--success {
     background-color: $success_color;
   }
 
-  &--danger{
+  &--danger {
     background-color: $danger_color;
   }
 }
 
 /* end Common */
-

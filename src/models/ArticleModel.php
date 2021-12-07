@@ -5,6 +5,12 @@ class ArticleModel extends BaseModel
     //in future use class attribute for model. ex: article->title, article->content, etc...
     const TABLE = 'articles';
     const PUBLIC_IMAGE_ARTICLE_PATH = '/public/assets/image/articles/';
+        
+    /**
+     * get all articles with thumbnail & author
+     *
+     * @return $articles
+     */
     public function get_all_join_table()
     {
         $sql = "SELECT articles.id, title, thumbnail_id, articles.created_at, src, authors.fullname FROM articles
@@ -13,10 +19,31 @@ class ArticleModel extends BaseModel
         $result = $this->query($sql);
         return $result->fetchAll();
     }
-
+    
+    /**
+     * get author's id
+     *
+     * @param  mixed $id
+     * @return $author_id
+     */
+    public function get_author_id($id)
+    {
+        $query_article = $this->prepare_query("SELECT author_id FROM articles WHERE id = :id");
+        $query_article->bindValue(':id', $id, PDO::PARAM_INT);
+        $query_article->execute();
+        $article = $query_article->fetch();
+        return $article['author_id'];
+    }
+    
+    /**
+     * find article with $id
+     *
+     * @param  mixed $id
+     * @return $article, $images
+     */
     public function find_by_id_join_table($id)
     {
-        $sql_article = "SELECT title, content, page_view, articles.created_at, authors.fullname FROM articles 
+        $sql_article = "SELECT title, content, page_view, articles.created_at, authors.fullname, author_id FROM articles 
                         INNER JOIN authors ON articles.author_id = authors.id 
                         WHERE articles.id=:id ";
         $query_article = $this->prepare_query($sql_article);
@@ -38,7 +65,13 @@ class ArticleModel extends BaseModel
 
         return [$article, $images];
     }
-
+    
+    /**
+     * get article's title & content
+     *
+     * @param  mixed $id
+     * @return $article
+     */
     public function show_edit($id)
     {
         $sql = "SELECT title, content FROM articles WHERE id = :id";
@@ -48,7 +81,15 @@ class ArticleModel extends BaseModel
         $article = $query->fetch();
         return $article;
     }
-
+        
+    /**
+     * update article's title & content
+     *
+     * @param  mixed $id
+     * @param  string $title
+     * @param  string $content
+     * @return bool
+     */
     public function udpate_article($id, $title, $content)
     {
         $query = $this->prepare_query('UPDATE articles SET title = :title, content = :content where id = :id');
@@ -57,7 +98,18 @@ class ArticleModel extends BaseModel
         $query->bindValue(':id', $id, PDO::PARAM_INT);
         return $query->execute();
     }
-
+    
+    /**
+     *  create article
+     *
+     * @param  string $title
+     * @param  object $images
+     * @param  string $thumbnail
+     * @param  string $content
+     * @param  mixed $categories_id
+     * @param  mixed $author_id
+     * @return bool
+     */
     public function create_article($title, $images, $thumbnail, $content, $categories_id = [], $author_id)
     {
         try {
@@ -119,7 +171,7 @@ class ArticleModel extends BaseModel
             // check query executed successfully?
             if (!$result_article || (isset($result_image) && !$result_image) || (isset($result_article_image) && !$result_article_image) || !$result_article_category) {
                 $this->connect->rollBack();
-                $this->remove_image_from_storage($paths); // delete stored image when failed
+                Helper::remove_image_from_storage($paths, self::PUBLIC_IMAGE_ARTICLE_PATH); // delete stored image when failed
                 return false;
             } else {
                 $this->connect->commit();
@@ -127,25 +179,18 @@ class ArticleModel extends BaseModel
             }
         } catch (PDOException $e) {
             $this->connect->rollBack();
-            $this->remove_image_from_storage($paths); // delete stored image when failed
+            Helper::remove_image_from_storage($paths, self::PUBLIC_IMAGE_ARTICLE_PATH); // delete stored image when failed
             echo 'Error: ' . $e->getMessage();
             return false;
         }
     }
-
-    public function remove_image_from_storage($paths = [])
-    {
-        try {
-            foreach ($paths as $p) {
-                unlink($_SERVER['DOCUMENT_ROOT'] . self::PUBLIC_IMAGE_ARTICLE_PATH . $p);
-            }
-        } catch (Exception $e) {
-            echo 'Error: ' . $e->getMessage();
-            return false;
-        }
-        return true;
-    }
-
+    
+    /**
+     * delete article
+     *
+     * @param  mixed $id
+     * @return bool
+     */
     public function delete_article($id)
     {
         $this->connect->beginTransaction();
@@ -160,14 +205,17 @@ class ArticleModel extends BaseModel
         $query_delete->bindValue(':id', $id, PDO::PARAM_INT);
         if ($query_delete->execute()) {
             if (!empty($path)) {
-                if ($this->remove_image_from_storage($path)) {
+                if (Helper::remove_image_from_storage($path, self::PUBLIC_IMAGE_ARTICLE_PATH)) {
                     $this->connect->commit();
                     return true;
                 } else {
                     $this->connect->rollBack();
                     return false;
                 }
-            } else return true;
+            } else {
+                $this->connect->commit();
+                return true;
+            }
         } else return false;
     }
 }

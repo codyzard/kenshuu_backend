@@ -18,6 +18,18 @@
   &__content {
     font-size: inherit;
   }
+  &__time {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  &__author a {
+    color: $info_color;
+    &:hover{
+      color: $sub_text;
+      text-decoration: underline;
+    }
+  }
   .sub-info {
     font-size: 1.3rem;
     display: flex;
